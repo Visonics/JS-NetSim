@@ -7,3 +7,5 @@ X, Y: X position, Y position
 Group: Simply changes color
 
 Implemented using D3.js
+
+[Try it](http://htmlpreview.github.com?https://github.com/farrukhshahzad/JS-NetSim/blob/master/d3Dev/index.html)
