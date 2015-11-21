@@ -22,24 +22,34 @@
     myDiagram.nodeTemplate =
       $(go.Node, go.Panel.Auto,
         { locationSpot: go.Spot.Center },
-        new go.Binding("location", "loc", go.Point.parse),
+        new go.Binding("location", "loc"),
         $(go.Shape,
-          { figure: "Circle", fill: "white" },
+          { figure: "Circle", fill: "white", width: 10, height: 10 },
           new go.Binding("fill", "color")),
         $(go.TextBlock,
-          { font: "bold 11pt sans-serif" },
-          new go.Binding("text"))
+          { font: "bold 3pt sans-serif" },
+          new go.Binding("text")),
+          { // this tooltip shows the name and picture of the kitten
+            toolTip:
+              $(go.Adornment, "Auto",
+                $(go.Shape, { fill: "lightyellow" }),
+                $(go.Panel, "Vertical",
+                   $(go.TextBlock, { margin: 3 },
+                    new go.Binding("text", "key"))
+                )
+              )  // end Adornment
+          }
       );
-
-    myDiagram.linkTemplate =
-      $(MultiNodePathLink,  // subclass of Link, defined below
-        go.Link.Bezier,
-        { layerName: "Background", toShortLength: 4 },
-        $(go.Shape, { strokeWidth: 4 },
-          new go.Binding("stroke", "color")),
-        $(go.Shape, { toArrow: "Standard", scale: 3, strokeWidth: 0 },
-          new go.Binding("fill", "color"))
-      );
+//
+//    myDiagram.linkTemplate =
+//      $(MultiNodePathLink,  // subclass of Link, defined below
+//        go.Link.Bezier,
+//        { layerName: "Background", toShortLength: 4 },
+//        $(go.Shape, { strokeWidth: 4 },
+//          new go.Binding("stroke", "color")),
+//        $(go.Shape, { toArrow: "Standard", scale: 3, strokeWidth: 0 },
+//          new go.Binding("fill", "color"))
+//      );
 
     myDiagram.addChangedListener(function(e) {
       // when a Node is moved, invalidate the route for all MultiNodePathLinks that go through it
@@ -72,19 +82,49 @@
     });
 
     // create a few nodes and links
-    myDiagram.model = new go.GraphLinksModel([
-        { key: 1, text: "Alpha", color: "lightyellow", loc: "0 0" },
-        { key: 2, text: "Beta", color: "brown", loc: "200 0" },
-        { key: 3, text: "Gamma", color: "green", loc: "300 100" },
-        { key: 4, text: "Delta", color: "slateblue", loc: "100 200" },
-        { key: 5, text: "Epsilon", color: "aquamarine", loc: "300 350" },
-        { key: 6, text: "Zeta", color: "tomato", loc: "0 100" },
-        { key: 7, text: "Eta", color: "goldenrod", loc: "0 300" },
-        { key: 8, text: "Theta", color: "orange", loc: "300 200" },
-    ], [
-        { from: 1, to: 5, path: [2, 3, 4], color: "blue" },
-        { from: 6, to: 5, path: [7, 4, 8], color: "red" }
-    ]);
+//    myDiagram.model = new go.GraphLinksModel([
+//        { key: 1, text: "Alpha", color: "lightyellow", loc: "0 0" },
+//        { key: 2, text: "Beta", color: "brown", loc: "200 0" },
+//        { key: 3, text: "Gamma", color: "green", loc: "300 100" },
+//        { key: 4, text: "Delta", color: "slateblue", loc: "100 200" },
+//        { key: 5, text: "Epsilon", color: "aquamarine", loc: "300 350" },
+//        { key: 6, text: "Zeta", color: "tomato", loc: "0 100" },
+//        { key: 7, text: "Eta", color: "goldenrod", loc: "0 300" },
+//        { key: 8, text: "Theta", color: "orange", loc: "300 200" },
+//    ]
+////    [
+////        { from: 1, to: 5, path: [2, 3, 4], color: "blue" },
+////        { from: 6, to: 5, path: [7, 4, 8], color: "red" }
+////    ]
+//    );
+   var commRange = 10.0;
+   var W=500, H=500;
+   var nodeDataArray = [];
+    var linkDataArray = [];
+    for (var i = 0; i < 100; i++) {
+      var x = Math.floor(Math.random() * W);
+      var y = Math.floor(Math.random() * H);
+      nodeDataArray.push({loc: new go.Point(x, y) , key: i, text: i, color: go.Brush.randomColor(128, 240) });
+    }
+    //myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+    var num = nodeDataArray.length;
+    for (var i = 0; i < num; i++) {
+      //var node = myDiagram.findNodeForKey(i);
+      thisloc = nodeDataArray[i].loc; //new go.Point(nodeDataArray[i].x, nodeDataArray[i].y);
+      for (var j = 0; j < num; j++) {
+          if (i==j) continue;
+          otherloc = nodeDataArray[j].loc; //new go.Point(nodeDataArray[j].x, nodeDataArray[j].y);
+          dist = Math.sqrt(thisloc.distanceSquaredPoint(otherloc));
+
+          if (dist <= commRange) {
+              console.log(i, j, dist);
+              linkDataArray.push({from: i, to: j, path: [], color: go.Brush.randomColor(0, 127)});
+          }
+      }
+    }
+    console.log(linkDataArray.length)
+
+    myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
   }
 
 
