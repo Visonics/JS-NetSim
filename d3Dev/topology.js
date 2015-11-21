@@ -13,6 +13,15 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
+var nodeElement = function (shape, classType, data, attrfn) {
+  var newNode;
+  newNode = svg.selectAll(classType)
+    .data(data)
+  .enter().append(shape);
+
+  return attrfn(newNode);
+}
+
 d3.json("/data.json", function(error, graph) {
   if (error) throw error;
 
@@ -34,40 +43,40 @@ d3.json("/data.json", function(error, graph) {
       .links(links)
       .start();
 
-  var link = svg.selectAll(".link")
-      .data(bilinks)
-    .enter().append("path")
-      .attr("class", "link");
+  var link = nodeElement("path", ".link", bilinks, function(element) {
+    return element.attr("class", "link");
+  })
 
-  var node = svg.selectAll(".node")
-      .data(graph.nodes)
-    .enter().append("circle")
+  var circleNode = nodeElement("circle", ".circleNode", graph.nodes, function(element) {
+    return element
       .filter(function(d){return (d.shape === "circle")})
       .attr("class", "node")
       .attr("r", function(d) {d.fixed = true; return d.size})
       .style("fill", function(d) { return color(d.group); })
       .call(force.drag);
+  });
 
-  var squareNode = svg.selectAll(".sqrNode")
-      .data(graph.nodes)
-    .enter().append("rect")
+  var squareNode = nodeElement("rect", ".sqrNode", graph.nodes, function(element) {
+    return element
       .filter(function(d){return (d.shape === "square")})
       .attr("class", "node")
       .attr("width", function(d) { return d.size })
       .attr("height", function(d) { return d.size })
       .style("fill", function(d) { d.fixed = true; return color(d.group); })
       .call(force.drag());
+  });
 
-  var texts = svg.selectAll(".label")
-      .data(graph.nodes)
-      .enter().append("text")
+
+  var texts = nodeElement("text", ".label", graph.nodes, function(element){
+    return element
       .attr("class", "label")
       .attr("fill", "black")
       .attr("font-family", "Arial")
       .text(function(d) {  return d.name;  });
+  })
 
 
-  node.append("title")
+  circleNode.append("title")
       .text(function(d) { return d.name; });
 
   force.on("tick", function() {
@@ -78,8 +87,7 @@ d3.json("/data.json", function(error, graph) {
           + " " + d[2].x + "," + d[2].y;
     });
 
-    node.attr("transform", function(d) {
-
+    circleNode.attr("transform", function(d) {
       return "translate(" + d.x + "," + d.y + ")";
     });
 
