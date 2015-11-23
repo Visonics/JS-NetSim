@@ -1,7 +1,7 @@
 {
   "nodes":[
-    {"name":"Myriel","group":1,"size":15, "x": 600, "y": 200, "shape": "square"},
-    {"name":"Napoleon","group":2,"size":10, "x": 300, "y": 400, "shape": "circle"},
+    {"name":"Myriel","group":1,"size":15, "x": 600, "y": 200, "shape": "square",  "color": "blue"},
+    {"name":"Napoleon","group":2,"size":10, "x": 300, "y": 400,  "color": "blue","shape": "circle"},
     {"name":"Mlle.Baptistine","group":3,"size":12, "x": 300, "y": 200, "shape": "square"},
     {"name":"Mme.Magloire","group":4,"size":13, "x": 50, "y": 50, "shape": "circle"},
     {"name":"CountessdeLo","group":5,"size":17, "x": 800, "y": 220, "shape": "square"},
