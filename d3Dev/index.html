@@ -12,9 +12,32 @@
   stroke: #bbb;
 }
 
+#jsonFile #graphName {
+  margin-bottom: 50px;
+}
+
 </style>
 <body>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
-<script src="topology.js"></script>
+    <form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
+
+      <fieldset>
+        <h2>Load JSON</h2>
+         <input type='file' id='fileinput'>
+         <input type='button' id='btnLoad' value='Load' onclick='loadFile();'>
+      </fieldset>
+
+    </form>
+
+    <h1 id="graphName">Graph Name</h1>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    
+    <script src="src/topology.js"></script>
+    <script src="src/filePicker.js"></script>
+    <script src="src/setPane.js"></script>
+
 </body>

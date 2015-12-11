@@ -1,3 +1,11 @@
+/////////////////////
+//
+// topology.js
+// 
+// This file is responsible for the rendering of nodes on a screen, based on a given json file
+//
+/////////////////////
+
 var width = 1000,
     height = 550;
 
@@ -9,8 +17,11 @@ var force = d3.layout.force()
 
 var drag = force.drag();
 
+var targetSvgId = "graph"
+
 var svg = d3.select("body").append("svg")
     .attr("width", width)
+    .attr("id", targetSvgId)
     .attr("height", height);
 
 var nodeElement = function (shape, classType, data, attrfn) {
@@ -22,8 +33,15 @@ var nodeElement = function (shape, classType, data, attrfn) {
   return attrfn(newNode);
 }
 
-d3.json("/cluster.json", function(error, graph) {
-  if (error) throw error;
+var render = function(graph, options) {
+
+  if (options) {
+    setPane(targetSvgId, options);
+  }
+
+  if (graph.graph && graph.graph.name) {
+    $('#graphName').text(graph.graph.name);
+  }
 
   var nodes = graph.nodes.slice(),
       links = [],
@@ -38,10 +56,10 @@ d3.json("/cluster.json", function(error, graph) {
   //  bilinks.push([s, i, t]);
   //});
 
-    		//x and y axis maps.
-  //		var x = d3.scale.linear().domain([0, 600]).range([0, width]);
-  //		var y = d3.scale.linear().domain([0, 500]).range([height, 0]);
-  //svg.append("rect").attr("x",100).attr("y",0).attr("width",600).attr("height",500).style("fill","rgb(235,235,209)");
+  // x and y axis maps.
+  // 		var x = d3.scale.linear().domain([0, 600]).range([0, width]);
+  // 		var y = d3.scale.linear().domain([0, 500]).range([height, 0]);
+  // svg.append("rect").attr("x",100).attr("y",0).attr("width",600).attr("height",500).style("fill","rgb(235,235,209)");
 
   force
       .nodes(graph.nodes)
@@ -116,6 +134,8 @@ d3.json("/cluster.json", function(error, graph) {
         return "translate(" +( d.x + -25 )+ "," + ( d.y + 30 ) + ")";
     });
   });
-});
+
+}
+
 
 
