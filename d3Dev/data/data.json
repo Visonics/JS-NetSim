@@ -1,7 +1,7 @@
 {
     "directed": false, 
     "graph": {
-        "name": "O-shaped Gaussian-EM - $N=$189(25), $D=$6.6, $R=$10.0 m\n$A=$7.5$\\times 10^3m^2$, $N_D=$25.2$/10^3.m^2$, Doi=0"
+        "name": "2 node lol graph"
     },
     "nodes": [
         {
