@@ -1,3 +1,6 @@
+// This will change based on what a user picks...
+var wipeOnNewLoad = false;
+
 var loadFile = function() {
   var input, file, fr;
 
@@ -31,6 +34,7 @@ var loadFile = function() {
   function receivedText(e) {
     lines = e.target.result;
     var graphData = JSON.parse(lines); 
-    render(graphData);
+    render(graphData, {wipeOnNewLoad: wipeOnNewLoad});
+    if (!wipeOnNewLoad) wipeOnNewLoad = true;
   }
 }

@@ -36,7 +36,7 @@ var nodeElement = function (shape, classType, data, attrfn) {
 var render = function(graph, options) {
 
   if (options) {
-    setPane(targetSvgId, options);
+    setPane(svg, options);
   }
 
   if (graph.graph && graph.graph.name) {
