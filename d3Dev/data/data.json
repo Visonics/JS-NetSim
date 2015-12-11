@@ -1,0 +1,33 @@
+{
+    "directed": false, 
+    "graph": {
+        "name": "2 node lol graph"
+    },
+    "nodes": [
+        {
+            "name": "0",
+            "color": "blue",
+            "shape": "square",
+            "y": 105.0,
+            "x": 104.0,
+            "id": 0,
+            "size": 10
+        },
+        {
+            "name": "1",
+            "color": "blue",
+            "shape": "square",
+            "y": 215.0,
+            "x": 660.0,
+            "id": 1,
+            "size": 10
+        }
+    ],
+    "links": [
+        {
+            "source": 0,
+            "target": 1
+        }
+    ],
+    "multigraph": false
+}
