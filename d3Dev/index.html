@@ -61,11 +61,17 @@
     }
 
     #jsonFile #graphName {
-        margin: 50px;
+        margin: 5px;
     }
 
 </style>
 <body>
+
+<div class="header" id="heads">
+        <div class="title">JS-NetSim</div>
+        <div>Copyright (c) 2016 and beyond, Farrukh Shahzad and Omar Shaikh
+            <hr>
+        </div>
     <div id="container">
     <!-- start bannerContainer -->
 
@@ -76,9 +82,9 @@
                 <li class="navsegment">
                     <a id="Resources" class="segmentlink" href="#glob3">Topology</a>
                     <ul id="glob3">
-                    <li><a href="">Load Topology</a></li>
-                    <li><a href="">Save Topology</a></li>
-                    <li><a href="">Generate Topology</a></li>
+                    <li><a href="#" onclick='showhide("form");'>Load Topology</a></li>
+                    <li><a href="#">Save Topology</a></li>
+                    <li><a href="#">Generate Topology</a></li>
                 <li align=center><hr>Useful Websites<hr></li>
                 <li><a href="http://quran.com" target='new'>Qur'an</a></li>
                 <li><a href="http://sunnah.com" target='new'>Hadith/Sunnah</a></li>
@@ -94,12 +100,7 @@
             </ul>
         </div>
     </div>
-<br>
-<div class="header" id="heads">
-        <div class="title">JS-NetSim</div>
-        <div>Copyright (c) 2016 and beyond, Farrukh Shahzad and Omar Shaikh
-            <hr>
-        </div>
+    <div id="form" style="display: none">
     <form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
 
       <fieldset>
@@ -107,8 +108,8 @@
          <input type='file' id='fileinput'>
          <input type='button' id='btnLoad' value='Load' onclick='loadFile();'>
       </fieldset>
-
     </form>
+    </div>
 </div>
 
     <h1 id="graphName">Graph Name</h1>

@@ -9,7 +9,7 @@ a, a:visited {color: #0052A5; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 
-#container { margin-left: auto; margin-right: auto; text-align: left; width: 250px; position: relative;}
+#container { margin-left: auto; margin-right: auto; margin: 10px; text-align: left; width: 250px; position: relative;}
 
 
 /* top rank Feb 2008 release */
