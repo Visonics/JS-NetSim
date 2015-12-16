@@ -77,7 +77,9 @@ var render = function(graph, options) {
       .data(graph.links)
     .enter().append("line")
       .attr("class", "link")
-      .style("stroke-dasharray", "5,5");
+      .style("color", "black")
+      .style("stroke-color", "black")
+      .style("stroke-dotarray", "5,5");
 
   var circleNode = nodeElement("circle", ".circleNode", graph.nodes, function(element) {
     return element
