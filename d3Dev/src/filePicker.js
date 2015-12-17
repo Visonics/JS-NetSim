@@ -24,6 +24,7 @@ var loadFile = function() {
 
     if (!file || file.type !== "application/json") {
       alert("Pick a file, and ensure that it is type json");
+      return;
     }
 
     fr = new FileReader();
