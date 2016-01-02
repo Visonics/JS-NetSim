@@ -35,7 +35,8 @@ var loadFile = function() {
   function receivedText(e) {
     lines = e.target.result;
     var graphData = JSON.parse(lines); 
-    render(graphData, {wipeOnNewLoad: wipeOnNewLoad});
     if (!wipeOnNewLoad) wipeOnNewLoad = true;
+    var network = NetworkXGenerator(graphData);
+    render(network, {wipeOnNewLoad: wipeOnNewLoad}, graphData.graph.name);
   }
 }
