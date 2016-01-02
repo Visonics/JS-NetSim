@@ -33,21 +33,31 @@ var nodeElement = function (shape, classType, data, attrfn) {
   return attrfn(newNode);
 }
 
-var render = function(graph, options) {
+var render = function(graph, options, name) {
 
   if (options) {
     setPane(svg, options);
   }
 
-  if (graph.graph && graph.graph.name) {
-    $('#graphName').text(graph.graph.name);
+  if (name) {
+    $('#graphName').text(name);
   }
 
-  var nodes = graph.nodes.slice(),
+  var nodes = [],
       links = [],
       bilinks = [];
 
-  //graph.links.forEach(function(link) {
+  graph.nodes(true).forEach(function(item){
+    nodes.push(item[1]);
+  });
+
+  graph.edges(true).forEach(function(item){
+    links.push({source: item[2].source, target: item[2].target});
+  });
+
+
+
+  //links.forEach(function(link) {
   //  var s = nodes[link.source],
   //      t = nodes[link.target],
   //      i = {}; // intermediate node
@@ -62,8 +72,8 @@ var render = function(graph, options) {
   // svg.append("rect").attr("x",100).attr("y",0).attr("width",600).attr("height",500).style("fill","rgb(235,235,209)");
 
   force
-      .nodes(graph.nodes)
-      .links(graph.links)
+      .nodes(nodes)
+      .links(links)
       .start();
 
   //var link = nodeElement("path", ".link", graph.links, function(element) {
@@ -74,14 +84,14 @@ var render = function(graph, options) {
 
 
   var link = svg.selectAll(".link")
-      .data(graph.links)
+      .data(links)
     .enter().append("line")
       .attr("class", "link")
       .style("color", "black")
       .style("stroke-color", "black")
       .style("stroke-dotarray", "5,5");
 
-  var circleNode = nodeElement("circle", ".circleNode", graph.nodes, function(element) {
+  var circleNode = nodeElement("circle", ".circleNode", nodes, function(element) {
     return element
       .filter(function(d){return (d.shape === "circle")})
       .attr("class", "node")
@@ -90,7 +100,7 @@ var render = function(graph, options) {
       .call(force.drag);
   });
 
-  var squareNode = nodeElement("rect", ".sqrNode", graph.nodes, function(element) {
+  var squareNode = nodeElement("rect", ".sqrNode", nodes, function(element) {
     return element
       .filter(function(d){return (d.shape === "square")})
       .attr("class", "node")
@@ -103,7 +113,7 @@ var render = function(graph, options) {
   });
 
 
-  var texts = nodeElement("text", ".label", graph.nodes, function(element){
+  var texts = nodeElement("text", ".label", nodes, function(element){
     return element
       .attr("class", "label")
       .attr("fill", "black")

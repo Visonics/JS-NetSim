@@ -3,6 +3,68 @@
  * 
  * 
 */
+
+body {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    margin-left: 1px;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+/* unvisited links */
+a:link {
+    color: #0033FF;
+    text-decoration: none
+}
+
+/* visited links */
+a:visited {
+    color: #0033FF;
+    text-decoration: none
+}
+
+/* active links */
+a:active {
+    color: #0033FF;
+    text-decoration: none
+}
+
+/*  hover links */
+a:hover {
+    color: black;
+    text-decoration: underline
+}
+
+.header {
+    position: relative;
+    background-color: lightblue;
+    border: 2px solid #5280FF;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.title {
+        color: Red;
+        font-size: 52px;
+        font-family: 'Oswald', Arial;
+        text-shadow: 4px 4px 4px #aaa;
+}
+
+.node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.link {
+    fill: none;
+    stroke: #bbb;
+}
+
+#jsonFile #graphName {
+    margin: 5px;
+}
+
 hr { height: 1px; width: 100%; margin-top: 0px; margin-bottom: 5px; border-color: #CCC; border-width: 0 0 1px 0; border-style: dashed; }
 .noprint{ display:none; }
 a, a:visited {color: #0052A5; text-decoration: none; }

@@ -24,6 +24,7 @@ var loadFile = function() {
 
     if (!file || file.type !== "application/json") {
       alert("Pick a file, and ensure that it is type json");
+      return;
     }
 
     fr = new FileReader();
@@ -34,7 +35,8 @@ var loadFile = function() {
   function receivedText(e) {
     lines = e.target.result;
     var graphData = JSON.parse(lines); 
-    render(graphData, {wipeOnNewLoad: wipeOnNewLoad});
     if (!wipeOnNewLoad) wipeOnNewLoad = true;
+    var network = NetworkXGenerator(graphData);
+    render(network, {wipeOnNewLoad: wipeOnNewLoad}, graphData.graph.name);
   }
 }
