@@ -113,13 +113,13 @@ var render = function(graph, options, name) {
   });
 
 
-  var texts = nodeElement("text", ".label", nodes, function(element){
-    return element
-      .attr("class", "label")
-      .attr("fill", "black")
-      .attr("font-family", "Arial")
-      .text(function(d) {  return '';  });
-  })
+  // var texts = nodeElement("text", ".label", nodes, function(element){
+  //   return element
+  //     .attr("class", "label")
+  //     .attr("fill", "black")
+  //     .attr("font-family", "Arial")
+  //     .text(function(d) {  return d.name;  });
+  // })
 
 
   circleNode.append("title")
@@ -129,10 +129,22 @@ var render = function(graph, options, name) {
       .text(function(d) { return d.name + "\nx= "+  d.x + ", y= " + d.y; });
 
   force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+
+    link.attr("x1", function(d) { 
+      // Utilize the ticks in D3 to update JSNetworkX Graph
+      graph = updateNetworkEdge(graph, d);
+      return d.source.x; 
+    })
+
+    .attr("y1", function(d) { 
+      return d.source.y; 
+    })
+    .attr("x2", function(d) {
+      return d.target.x; 
+    })
+    .attr("y2", function(d) {
+     return d.target.y; 
+    });
 
     circleNode.attr("transform", function(d) {
       return "translate(" + d.x + "," + d.y + ")";
@@ -142,9 +154,9 @@ var render = function(graph, options, name) {
       return "translate(" + d.x + "," + d.y + ")";
     });
 
-    texts.attr("transform", function(d) {
-        return "translate(" +( d.x + -25 )+ "," + ( d.y + 30 ) + ")";
-    });
+    // texts.attr("transform", function(d) {
+    //   return "translate(" +( d.x + -25 )+ "," + ( d.y + 30 ) + ")";
+    // });
   });
 
 }
