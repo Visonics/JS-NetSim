@@ -25,33 +25,25 @@ var NetworkXGenerator = function(networkJSON){
   networkJSON.links.forEach(function(link){
 
     var sourceName = link.source.toString();
-    var sourcePos = {}
     var sourceIndex;
     var sourceNode;
     var destinationName = link.target.toString();
-    var destinationPos = {};
     var destinationIndex;
     var destinationNode;
 
     g.nodes(true).forEach(function(node, index){
       if (node[0] === sourceName) {
-        sourcePos.x = node[1].x;
-        sourcePos.y = node[1].y;
         sourceIndex = index;
         sourceNode = node;
       } else if (node[0] === destinationName) {
-        destinationPos.x = node[1].x;
-        destinationPos.y = node[1].y;
         destinationIndex = index;
         destinationNode = node;
       }
     });
 
-    var distance = dist(sourcePos.x, sourcePos.y, destinationPos.x, destinationPos.y);
 
     g.addEdge(sourceName, destinationName, 
       {
-        weight: distance, 
         source: sourceIndex, 
         target: destinationIndex, 
         destinationNode: destinationNode,
@@ -70,6 +62,11 @@ var updateNetworkEdge = function (graph, nodeData) {
 
   // replace the edge with new weight
   graph.addEdge(nodeData.source.name, nodeData.target.name, {weight: newDist});
+  graph.addNode(nodeData.source.name, nodeData.source);
+  graph.addNode(nodeData.target.name, nodeData.target);
+
+  debugger;
+
   return graph;
 }
 

@@ -139,9 +139,11 @@ var render = function(graph, options, name) {
     .attr("y1", function(d) { 
       return d.source.y; 
     })
+
     .attr("x2", function(d) {
       return d.target.x; 
     })
+
     .attr("y2", function(d) {
      return d.target.y; 
     });
