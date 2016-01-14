@@ -113,6 +113,13 @@ var render = function(graph, options, name) {
   });
 
 
+
+  var updateVisuals = function(data) {
+    if (data.removedEdge) {
+      console.log(data.removedEdge);
+      // debugger;
+    }
+  }
   // var texts = nodeElement("text", ".label", nodes, function(element){
   //   return element
   //     .attr("class", "label")
@@ -132,7 +139,8 @@ var render = function(graph, options, name) {
 
     link.attr("x1", function(d) { 
       // Utilize the ticks in D3 to update JSNetworkX Graph
-      graph = updateNetworkEdge(graph, d);
+      var changes = updateNetwork(graph, d);
+      updateVisuals(changes);
       return d.source.x; 
     })
 

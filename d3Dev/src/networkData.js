@@ -1,3 +1,6 @@
+var generalNetworkData = {};
+
+
 var dist = function(x1, y1, x2, y2){ 
   if (!x2) x2 = 0; 
   if (!y2) y2 = 0;
@@ -19,6 +22,10 @@ var NetworkXGenerator = function(networkJSON){
     g.addNode(name, node);
   });
 
+  // See if r exists, and save it.
+  if (networkJSON.r) {
+    generalNetworkData.r = networkJSON.r;
+  }
 
   // Our edge weight will be defined using distance between coordiantes.
   // See pythagorean theorom
@@ -56,17 +63,36 @@ var NetworkXGenerator = function(networkJSON){
 
 }
 
-var updateNetworkEdge = function (graph, nodeData) {
+var updateNetwork = function (graph, nodeData) {
+  var changes = {};
   //  Calculate a new distance
   var newDist = dist(nodeData.source.x, nodeData.source.y, nodeData.target.x, nodeData.target.y);
 
-  // replace the edge with new weight
-  graph.addEdge(nodeData.source.name, nodeData.target.name, {weight: newDist});
+  // Replace nodes with new x and y positions
   graph.addNode(nodeData.source.name, nodeData.source);
   graph.addNode(nodeData.target.name, nodeData.target);
+  
+  // console.log(generalNetworkData.r, newDist);
+  // Remove edge in networkx if r is large
+  if (generalNetworkData.r < newDist) {
+    if (!generalNetworkData.removed) generalNetworkData.removed = {};
 
-  debugger;
+    if (!generalNetworkData.removed[nodeData.source.name + nodeData.source.target]) {    
+      graph.removeEdge(nodeData.source.name, nodeData.target.name);
+      changes.removedEdge = [nodeData.source.name, nodeData.target.name];
+      generalNetworkData.removed[nodeData.source.name + nodeData.source.target] = true;
+    }
 
-  return graph;
+
+  } else {  
+    // replace the edge with new weight
+    generalNetworkData.removed[nodeData.source.name + nodeData.source.target] = false;
+    graph.addEdge(nodeData.source.name, nodeData.target.name, {weight: newDist});
+  }
+
+
+  // Graph is mutated. No need to return. 
+  // TODO: return settings, which topology.js will read, and update svg accordingly.
+  return changes;
 }
 
