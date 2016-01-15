@@ -55,37 +55,14 @@ var render = function(graph, options, name) {
     links.push({source: item[2].source, target: item[2].target});
   });
 
-
-
-  //links.forEach(function(link) {
-  //  var s = nodes[link.source],
-  //      t = nodes[link.target],
-  //      i = {}; // intermediate node
-  //  nodes.push(i);
-  //  links.push({source: s, target: t});
-  //  bilinks.push([s, i, t]);
-  //});
-
-  // x and y axis maps.
-  // 		var x = d3.scale.linear().domain([0, 600]).range([0, width]);
-  // 		var y = d3.scale.linear().domain([0, 500]).range([height, 0]);
-  // svg.append("rect").attr("x",100).attr("y",0).attr("width",600).attr("height",500).style("fill","rgb(235,235,209)");
-
   force
       .nodes(nodes)
       .links(links)
       .start();
 
-  //var link = nodeElement("path", ".link", graph.links, function(element) {
-  //  return element
-  //      .attr("class", "link"
-  //      .attr("weight", 1));
-  //});
-
-
   var link = svg.selectAll(".link")
       .data(links)
-    .enter().append("line")
+      .enter().append("line")
       .attr("class", "link")
       .style("color", "black")
       .style("stroke-color", "black")
@@ -112,22 +89,23 @@ var render = function(graph, options, name) {
       .call(force.drag());
   });
 
+  var updateVisuals = function(data, link) {
 
-
-  var updateVisuals = function(data) {
     if (data.removedEdge) {
-      console.log(data.removedEdge);
-      // debugger;
-    }
-  }
-  // var texts = nodeElement("text", ".label", nodes, function(element){
-  //   return element
-  //     .attr("class", "label")
-  //     .attr("fill", "black")
-  //     .attr("font-family", "Arial")
-  //     .text(function(d) {  return d.name;  });
-  // })
+      debugger;
 
+      var link = link.filter(function(d){ 
+        return d.source.name === data.removedEdge[0] && d.target.name === data.removedEdge[1]
+      })
+      link.style("stroke", "none");
+    } else if (data.addedEdge) {
+      debugger;
+
+      var link = link.filter(function(d){ 
+        return d.source.name === data.addedEdge[0] && d.target.name === data.addedEdge[1]
+      })
+      link.style("stroke", "#bbb");    }
+  }
 
   circleNode.append("title")
       .text(function(d) { return d.name + "\nx= "+  d.x + ", y= " + d.y; });
@@ -140,7 +118,7 @@ var render = function(graph, options, name) {
     link.attr("x1", function(d) { 
       // Utilize the ticks in D3 to update JSNetworkX Graph
       var changes = updateNetwork(graph, d);
-      updateVisuals(changes);
+      updateVisuals(changes, link);
       return d.source.x; 
     })
 
@@ -164,9 +142,6 @@ var render = function(graph, options, name) {
       return "translate(" + d.x + "," + d.y + ")";
     });
 
-    // texts.attr("transform", function(d) {
-    //   return "translate(" +( d.x + -25 )+ "," + ( d.y + 30 ) + ")";
-    // });
   });
 
 }

@@ -63,7 +63,10 @@ var NetworkXGenerator = function(networkJSON){
 
 }
 
+// TODO: Clean this up, and make it more efficient.
+// Meaning, it doesn't need to run on "every tickback"
 var updateNetwork = function (graph, nodeData) {
+
   var changes = {};
   //  Calculate a new distance
   var newDist = dist(nodeData.source.x, nodeData.source.y, nodeData.target.x, nodeData.target.y);
@@ -73,20 +76,24 @@ var updateNetwork = function (graph, nodeData) {
   graph.addNode(nodeData.target.name, nodeData.target);
   
   // console.log(generalNetworkData.r, newDist);
+  if (!generalNetworkData.removed) generalNetworkData.removed = {};
   // Remove edge in networkx if r is large
   if (generalNetworkData.r < newDist) {
-    if (!generalNetworkData.removed) generalNetworkData.removed = {};
 
-    if (!generalNetworkData.removed[nodeData.source.name + nodeData.source.target]) {    
+    if (!generalNetworkData.removed[nodeData.source.name + nodeData.target.name]) {    
       graph.removeEdge(nodeData.source.name, nodeData.target.name);
       changes.removedEdge = [nodeData.source.name, nodeData.target.name];
-      generalNetworkData.removed[nodeData.source.name + nodeData.source.target] = true;
+      generalNetworkData.removed[nodeData.source.name + nodeData.target.name] = true;
     }
 
 
   } else {  
     // replace the edge with new weight
-    generalNetworkData.removed[nodeData.source.name + nodeData.source.target] = false;
+    if (generalNetworkData.removed[nodeData.source.name + nodeData.target.name]) {
+      changes.addedEdge = [nodeData.source.name, nodeData.target.name]
+      generalNetworkData.removed[nodeData.source.name + nodeData.target.name] = false;
+    }
+    
     graph.addEdge(nodeData.source.name, nodeData.target.name, {weight: newDist});
   }
 
