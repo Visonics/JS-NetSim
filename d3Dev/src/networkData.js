@@ -1,3 +1,6 @@
+var generalNetworkData = {};
+
+
 var dist = function(x1, y1, x2, y2){ 
   if (!x2) x2 = 0; 
   if (!y2) y2 = 0;
@@ -19,39 +22,35 @@ var NetworkXGenerator = function(networkJSON){
     g.addNode(name, node);
   });
 
+  // See if r exists, and save it.
+  if (networkJSON.r) {
+    generalNetworkData.r = networkJSON.r;
+  }
 
   // Our edge weight will be defined using distance between coordiantes.
   // See pythagorean theorom
   networkJSON.links.forEach(function(link){
 
     var sourceName = link.source.toString();
-    var sourcePos = {}
     var sourceIndex;
     var sourceNode;
     var destinationName = link.target.toString();
-    var destinationPos = {};
     var destinationIndex;
     var destinationNode;
 
     g.nodes(true).forEach(function(node, index){
       if (node[0] === sourceName) {
-        sourcePos.x = node[1].x;
-        sourcePos.y = node[1].y;
         sourceIndex = index;
         sourceNode = node;
       } else if (node[0] === destinationName) {
-        destinationPos.x = node[1].x;
-        destinationPos.y = node[1].y;
         destinationIndex = index;
         destinationNode = node;
       }
     });
 
-    var distance = dist(sourcePos.x, sourcePos.y, destinationPos.x, destinationPos.y);
 
     g.addEdge(sourceName, destinationName, 
       {
-        weight: distance, 
         source: sourceIndex, 
         target: destinationIndex, 
         destinationNode: destinationNode,
@@ -64,12 +63,43 @@ var NetworkXGenerator = function(networkJSON){
 
 }
 
-var updateNetworkEdge = function (graph, nodeData) {
+// TODO: Clean this up, and make it more efficient.
+// Meaning, it doesn't need to run on "every tickback"
+var updateNetwork = function (graph, nodeData) {
+
+  var changes = {};
   //  Calculate a new distance
   var newDist = dist(nodeData.source.x, nodeData.source.y, nodeData.target.x, nodeData.target.y);
 
-  // replace the edge with new weight
-  graph.addEdge(nodeData.source.name, nodeData.target.name, {weight: newDist});
-  return graph;
+  // Replace nodes with new x and y positions
+  graph.addNode(nodeData.source.name, nodeData.source);
+  graph.addNode(nodeData.target.name, nodeData.target);
+  
+  // console.log(generalNetworkData.r, newDist);
+  if (!generalNetworkData.removed) generalNetworkData.removed = {};
+  // Remove edge in networkx if r is large
+  if (generalNetworkData.r < newDist) {
+
+    if (!generalNetworkData.removed[nodeData.source.name + nodeData.target.name]) {    
+      graph.removeEdge(nodeData.source.name, nodeData.target.name);
+      changes.removedEdge = [nodeData.source.name, nodeData.target.name];
+      generalNetworkData.removed[nodeData.source.name + nodeData.target.name] = true;
+    }
+
+
+  } else {  
+    // replace the edge with new weight
+    if (generalNetworkData.removed[nodeData.source.name + nodeData.target.name]) {
+      changes.addedEdge = [nodeData.source.name, nodeData.target.name]
+      generalNetworkData.removed[nodeData.source.name + nodeData.target.name] = false;
+    }
+    
+    graph.addEdge(nodeData.source.name, nodeData.target.name, {weight: newDist});
+  }
+
+
+  // Graph is mutated. No need to return. 
+  // TODO: return settings, which topology.js will read, and update svg accordingly.
+  return changes;
 }
 
