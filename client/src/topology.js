@@ -6,8 +6,8 @@
 //
 /////////////////////
 
-var width = 1000,
-    height = 550;
+var width = 700,
+    height = 400;
 
 var color = d3.scale.category20();
 
@@ -19,10 +19,7 @@ var drag = force.drag();
 
 var targetSvgId = "graph"
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("id", targetSvgId)
-    .attr("height", height);
+var svg;
 
 var nodeElement = function (shape, classType, data, attrfn) {
   var newNode;
@@ -35,12 +32,19 @@ var nodeElement = function (shape, classType, data, attrfn) {
 
 var render = function(graph, options, name) {
 
+  if (!svg) {
+    svg = d3.select(".networkview").append("svg")
+    .attr("id", targetSvgId)
+
+    $(".networkview").addClass("svgborder");
+  }
+
   if (options) {
     setPane(svg, options);
   }
 
   if (name) {
-    $('#graphName').text(name);
+    // $('#graphName').text(name);
   }
 
   var nodes = [],

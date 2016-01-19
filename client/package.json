@@ -1,0 +1,14 @@
+{
+  "name": "js-netsim-client",
+  "version": "0.0.1",
+  "description": "Start with python -m SimpleHTTPServer. Then view localhost:8000",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Omar Shaikh <oshaikh13@gmail.com> (http://www.awesomeomar.com)",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}
