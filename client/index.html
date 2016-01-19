@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel='stylesheet' href='css/menu.css' type='text/css' />
+  </head>
+  <body>
+    <div class="header" id="heads">
+      <div class="title">JS-NetSim</div>
+      <div>Copyright (c) 2016 and beyond, Farrukh Shahzad and Omar Shaikh
+        <hr>
+      </div>
+      <div id="container">
+        <!-- start bannerContainer -->
+        <div id="tabs" class="globalnav" role="navigation">
+          <!-- main navigation start -->
+          <!-- Begin Navigation -->
+          <ul>
+            <li class="navsegment">
+              <a id="Resources" class="segmentlink" href="#glob3">Topology</a>
+              <ul id="glob3">
+                <li><a href="#" onclick='showhide("form");'>Load Topology</a></li>
+                <li><a href="#">Save Topology as SVG</a></li>
+                <li><a href="#">Save Topology as PNG</a></li>
+                <li><a href="#">Save Topology as PDF</a></li>
+                <li><a href="#">Save Topology as JSON</a></li>
+                <li><a href="#">Generate Topology</a></li>
+                <li align=center><hr>Useful Websites<hr></li>
+                <li><a href="http://quran.com" target='new'>Qur'an</a></li>
+                <li><a href="http://sunnah.com" target='new'>Hadith/Sunnah</a></li>
+                <li><a href="http://muslimscholars.info" target='new'>Muslim Scholars</a></li>
+                <li><a href="http://qaalarasulallah.com" target='new'>Qaala Rasul Allah</a></li>
+                <li><a href="http://fiqhpedia.com" target='new'>Comparative Fiqh</a></li>
+                <li><a href="http://beyondccie.com/IP/ipschema.html" target='new'>IP Schema</a></li>
+                <li><a href="http://www.kfupm.edu.sa" target='new'>KFUPM</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div id="form" style="display: none">
+        <form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
+          <fieldset>
+            <h2>Load JSON</h2>
+            <input type='file' id='fileinput'>
+            <input type='button' id='btnLoad' value='Load' onclick='loadFile();'>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+
+    <form id="svgform" method="post">
+      <input type="hidden" id="output_format" name="output_format" value="">
+      <input type="hidden" id="data" name="data" value="">
+    </form>
+
+    <h1 id="graphName">Graph Name</h1>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
+    <script src="resources/jsnetworkx.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="resources/LAB.min.js" type="text/javascript"></script>
+
+    <script src="src/showhide.js" type="text/javascript"></script>
+    <script src="src/fileSaver.js" type="text/javascript"></script>
+    <script src="src/networkData.js"></script>
+    <script src="src/topology.js"></script>
+    <script src="src/filePicker.js"></script>
+    <script src="src/setPane.js"></script>
+    
+  </body>
+</html>
