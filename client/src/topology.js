@@ -6,16 +6,8 @@
 //
 /////////////////////
 
-var width = 700,
-    height = 400;
-
 var color = d3.scale.category20();
 
-var force = d3.layout.force()
-    .alpha(0)
-    .size([width, height]);
-
-var drag = force.drag();
 
 var targetSvgId = "graph"
 
@@ -37,10 +29,19 @@ var render = function(graph, options, name) {
     $(".networkview").addClass("svgborder");
   }
 
+
   if (options) {
     setPane(svg, options);
   }
 
+  if (!force) {
+    force = d3.layout.force()
+    .alpha(0)
+    .size([options.width, options.height]);
+  }
+
+  var drag = force.drag();
+  
   if (name) {
     // $('#graphName').text(name);
   }
