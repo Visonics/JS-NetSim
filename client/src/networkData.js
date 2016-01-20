@@ -23,8 +23,9 @@ var NetworkXGenerator = function(networkJSON) {
   });
 
   // See if r exists, and save it.
-  if (networkJSON.r) {
-    generalNetworkData.r = networkJSON.r;
+  //console.log(networkJSON)
+  if (networkJSON.graph.r) {
+    generalNetworkData.r = networkJSON.graph.r;
   }
 
   // Our edge weight will be defined using distance between coordiantes.
@@ -79,6 +80,7 @@ var updateNetwork = function(graph, nodeData) {
   // Remove edge in networkx if r is large
   if (generalNetworkData.r < newDist) {
 
+    //console.log(generalNetworkData.r, newDist);
     if (!generalNetworkData.removed[nodeData.source.name + nodeData.target.name]) {
       graph.removeEdge(nodeData.source.name, nodeData.target.name);
       changes.removedEdge = [nodeData.source.name, nodeData.target.name];

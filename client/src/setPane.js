@@ -1,4 +1,4 @@
-var width = 700;
+var width = 600;
 var height = 500;
 
 var setPane = function(target, options){
@@ -7,9 +7,9 @@ var setPane = function(target, options){
   if (options.wipeOnNewLoad) {
     target.selectAll("*").remove();
   }
-
+  console.log(options.width, options.height)
   if (options.width && options.height) {
-    svg.attr("width", options.width)
+    svg.attr("width", options.width+50)
     .attr("id", targetSvgId)
     .attr("height", options.height);
   } else {

@@ -6,8 +6,8 @@
 //
 /////////////////////
 
-var width = 700,
-    height = 400;
+var width = 600,
+    height = 450;
 
 var color = d3.scale.category20();
 
@@ -44,7 +44,7 @@ var render = function(graph, options, name) {
   }
 
   if (name) {
-    // $('#graphName').text(name);
+     $('#graphName').text(name);
   }
 
   var nodes = [],
