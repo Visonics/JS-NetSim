@@ -1,8 +1,13 @@
 {
-    "directed": false, 
+    "directed": false,
     "graph": {
-        "name": "Randomized Grid - $N=$97(8), $D=$1.6, $R=$10.0 m\n$A=$10.0$\\times 10^3m^2$, $N_D=$9.7$/10^3.m^2$, Doi=0"
+        "name": "Randomized Grid",
+        "r": 60,
+        "drag": true,
+        "width": 600,
+        "height": 500
     },
+
     "nodes": [
         {
             "name": "0",
