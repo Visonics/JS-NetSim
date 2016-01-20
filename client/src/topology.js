@@ -44,7 +44,7 @@ var render = function(graph, options, name) {
   }
 
   if (name) {
-    // $('#graphName').text(name);
+     $('#graphName').text(name);
   }
 
   var nodes = [],

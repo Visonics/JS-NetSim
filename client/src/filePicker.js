@@ -23,8 +23,8 @@ var loadFile = function() {
     file = input.files[0];
 
     if (!file || file.type !== "application/json") {
-      alert("Pick a file, and ensure that it is type json");
-      return;
+      //alert("Pick a file, and ensure that it is type json");
+      //return;
     }
 
     fr = new FileReader();
