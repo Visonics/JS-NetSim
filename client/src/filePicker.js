@@ -10,6 +10,17 @@ var makeRadioDiv = function(name) {
   return '<div class="radio"><label><input type="radio" name="optradio" value="' + name + '">' + name + '</label></div>';
 }
 
+var changeLoadButton = function() {
+  debugger;
+  console.log('triggered');
+  if (JSONLoaded) {
+    $('#loadbutton').text('Graph Settings');
+  } else {
+    $('#loadbutton').text('Load JSON');
+
+  }
+}
+
 var showModal = function() {
   if (!JSONLoaded) {
 
@@ -38,6 +49,9 @@ var displayNetwork = function(graphData) {
 
 var loadFile = function() {
 
+  $('#filePickerModal').modal('hide');
+
+
   var serverDataFile = $('input[name=optradio]:checked', '.server-selection').val();
   if (serverDataFile) {
     $.ajax({
@@ -48,6 +62,8 @@ var loadFile = function() {
       }
     })
 
+    JSONLoaded = true;
+    changeLoadButton();
     return;
   }
 
@@ -79,7 +95,8 @@ var loadFile = function() {
     fr = new FileReader();
     fr.onload = receivedText;
     fr.readAsText(file);
-    // JSONLoaded = true;
+    JSONLoaded = true;
+    changeLoadButton();
   }
 
   function receivedText(e) {
