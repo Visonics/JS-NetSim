@@ -10,7 +10,8 @@
 
 graphData = {
     "graph": {
-        "name": "A Sample Network (move nodes to make a ring)"
+        "name": "A Sample Network (move nodes to make a ring)",
+        "r": 250
     },
     "nodes": [
         {
@@ -45,7 +46,7 @@ graphData = {
             "color": "green",
             "shape": "circle",
             "y": 315.0,
-            "x": 300.0,
+            "x": 10.0,
             "id": 3,
             "size": 15
         }
@@ -67,9 +68,8 @@ graphData = {
             "source": 3,
             "target": 1
         }
-    ],
-    "r": 180
+    ]
 }
 
 var network = NetworkXGenerator(graphData);
-render(network, {wipeOnNewLoad: true, width: graphData.height, height: graphData.width}, graphData.graph.name);
+render(network, {wipeOnNewLoad: true, width: graphData.graph.width, height: graphData.graph.height}, graphData.graph.name);

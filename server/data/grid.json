@@ -1,12 +1,13 @@
 {
     "directed": false,
-    "width": 800,
-    "height": 800,
     "graph": {
-        "name": "Randomized Grid"
+        "name": "Randomized Grid",
+        "r": 60,
+        "drag": true,
+        "width": 600,
+        "height": 500
     },
-    "r": 20,
-    "drag": true,
+
     "nodes": [
         {
             "name": "0",

@@ -1,12 +1,13 @@
 {
     "directed": false, 
-    "width": 800,
-    "height": 800,
+
     "graph": {
-        "name": "O-shaped N=189(25), D=6.6, R=10.0 m"
+        "name": "O-shaped N=189(25), D=6.6, R=10.0 m",
+        "r": 60,
+        "drag": true,
+        "width": 600,
+        "height": 500
     },
-    "r": 180,
-    "drag": true,
     "nodes": [
         {
             "name": "0",

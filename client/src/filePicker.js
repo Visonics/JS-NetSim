@@ -37,6 +37,7 @@ var loadFile = function() {
     var graphData = JSON.parse(lines); 
     if (!wipeOnNewLoad) wipeOnNewLoad = true;
     var network = NetworkXGenerator(graphData);
-    render(network, {wipeOnNewLoad: wipeOnNewLoad, width: graphData.height, height: graphData.width}, graphData.graph.name);
+    render(network, {wipeOnNewLoad: wipeOnNewLoad, width: graphData.graph.width,
+      height: graphData.graph.height}, graphData.graph.name);
   }
 }
