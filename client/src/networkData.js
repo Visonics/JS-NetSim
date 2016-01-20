@@ -1,4 +1,5 @@
 var generalNetworkData = {};
+var removed = {};
 
 
 var dist = function(x1, y1, x2, y2) {
@@ -8,6 +9,9 @@ var dist = function(x1, y1, x2, y2) {
 }
 
 var NetworkXGenerator = function(networkJSON) {
+
+  generalNetworkData = {};
+  removed = {};
 
   var g;
   if (networkJSON.directed) {
@@ -25,6 +29,8 @@ var NetworkXGenerator = function(networkJSON) {
   // See if r exists, and save it.
   if (networkJSON.r) {
     generalNetworkData.r = networkJSON.r;
+  } else {
+    generalNetworkData.r = Infinity;
   }
 
   // Our edge weight will be defined using distance between coordiantes.
@@ -62,6 +68,33 @@ var NetworkXGenerator = function(networkJSON) {
 
 }
 
+// These network settings methods play with the modal. They are aspects of a view.
+// TODO: Maybe use backbone for MVC setup. Or React
+var updateNetworkSettings = function() {
+  debugger;
+  for (var key in generalNetworkData) {
+    if ($('#' + key).val()) {
+      generalNetworkData[key] = $('#' + key).val();
+    }
+  }
+}
+
+var displayNetworkSettings = function() {
+  
+  var makeInputDiv = function(name, val) {
+    return '<div class="input-group">' + 
+      '<div class="input-group-addon">' + name + '</div>' + 
+      '<input type="text" class="form-control" id="' + name + '" placeholder="' + val +'">' + 
+      '</div><br >';
+  }
+
+  $('.graph-selection').empty();
+  for (var key in generalNetworkData) {
+    $('.graph-selection').append(makeInputDiv(key, generalNetworkData[key]));
+  }
+
+}
+
 // TODO: Clean this up, and make it more efficient.
 // Meaning, it doesn't need to run on "every tickback"
 var updateNetwork = function(graph, nodeData) {
@@ -75,22 +108,21 @@ var updateNetwork = function(graph, nodeData) {
   graph.addNode(nodeData.target.name, nodeData.target);
 
   // console.log(generalNetworkData.r, newDist);
-  if (!generalNetworkData.removed) generalNetworkData.removed = {};
   // Remove edge in networkx if r is large
   if (generalNetworkData.r < newDist) {
 
-    if (!generalNetworkData.removed[nodeData.source.name + nodeData.target.name]) {
+    if (!removed[nodeData.source.name + nodeData.target.name]) {
       graph.removeEdge(nodeData.source.name, nodeData.target.name);
       changes.removedEdge = [nodeData.source.name, nodeData.target.name];
-      generalNetworkData.removed[nodeData.source.name + nodeData.target.name] = true;
+      removed[nodeData.source.name + nodeData.target.name] = true;
     }
 
 
   } else {
     // replace the edge with new weight
-    if (generalNetworkData.removed[nodeData.source.name + nodeData.target.name]) {
+    if (removed[nodeData.source.name + nodeData.target.name]) {
       changes.addedEdge = [nodeData.source.name, nodeData.target.name]
-      generalNetworkData.removed[nodeData.source.name + nodeData.target.name] = false;
+      removed[nodeData.source.name + nodeData.target.name] = false;
     }
 
     graph.addEdge(nodeData.source.name, nodeData.target.name, {

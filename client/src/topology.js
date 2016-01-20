@@ -19,8 +19,6 @@ var drag = force.drag();
 
 var targetSvgId = "graph"
 
-var svg;
-
 var nodeElement = function (shape, classType, data, attrfn) {
   var newNode;
   newNode = svg.selectAll(classType)
@@ -96,14 +94,12 @@ var render = function(graph, options, name) {
   var updateVisuals = function(data, link) {
 
     if (data.removedEdge) {
-      debugger;
 
       var link = link.filter(function(d){ 
         return d.source.name === data.removedEdge[0] && d.target.name === data.removedEdge[1]
       })
       link.style("stroke", "none");
     } else if (data.addedEdge) {
-      debugger;
 
       var link = link.filter(function(d){ 
         return d.source.name === data.addedEdge[0] && d.target.name === data.addedEdge[1]
