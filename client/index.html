@@ -34,7 +34,7 @@
         <h1>Simulate Networks</h1>
         <p class="lead">JS-Netsim allows you to display complex networks by loading JSON from a server,
         or importing it from your PC.</p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button" data-toggle="modal" data-target="#filePickerModal">Load JSON</a></p>
+        <p><a class="btn btn-lg btn-success" href="#" role="button" onclick="showModal()">Load JSON</a></p>
       </div>
       <div class="networkview">
       </div>
@@ -73,12 +73,16 @@
               </div>
               <div class="col-md-6">
                 <h4>From our servers</h4>
+                <div>
+                  <form class="server-selection">
+                  </form>
+                </div>
               </div>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="loadFile()">Create Network</button>
+            <button type="button" class="btn btn-primary" onclick="loadFile()">Create Network</button>
           </div>
         </div>
       </div>
