@@ -1,4 +1,5 @@
 // This will change based on what a user picks...
+var svg = false;
 
 var serverURL = "http://localhost:3000"
 
@@ -6,13 +7,20 @@ var wipeOnNewLoad = false;
 
 var JSONLoaded = false;
 
+var clearpane = function(){
+  JSONLoaded = false;
+  changeLoadButton();
+  $('.networkview').empty();
+  $(".networkview").removeClass("svgborder");
+  svg = false;
+
+}
+
 var makeRadioDiv = function(name) {
   return '<div class="radio"><label><input type="radio" name="optradio" value="' + name + '">' + name + '</label></div>';
 }
 
 var changeLoadButton = function() {
-  debugger;
-  console.log('triggered');
   if (JSONLoaded) {
     $('#loadbutton').text('Graph Settings');
   } else {
@@ -37,7 +45,8 @@ var showModal = function() {
     })
 
   } else {
-
+    displayNetworkSettings();
+    $('#graphSettingsModal').modal('show');
   }
 }
 

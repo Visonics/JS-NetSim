@@ -71,6 +71,7 @@
                 <h4>From your PC</h4>
                 <input type='file' id='fileinput'>
               </div>
+
               <div class="col-md-6">
                 <h4>From our servers</h4>
                 <div>
@@ -83,6 +84,33 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" onclick="loadFile()">Create Network</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- This is a graph settings modal -->
+    <div class="modal fade" id="graphSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myFilePickerModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Graph Settings</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-2"></div>
+              <div class="col-md-8">              
+                <form class="graph-selection">
+                </form>
+              </div>
+              <div class="col-md-2"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" onclick="clearpane()" data-dismiss="modal">Clear Graph</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="updateNetworkSettings()">Save Settings</button>
           </div>
         </div>
       </div>
