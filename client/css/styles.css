@@ -3,15 +3,11 @@
     padding: 20px; 
 }
 
-.node {
-    stroke: #fff;
-    stroke-width: 1.5px;
+.link {
+  stroke: #000;
+  stroke-width: 1.5px;
 }
 
-.link {
-    fill: none;
-    stroke: #bbb;
-}
 
 /* Space out content a bit */
 body {

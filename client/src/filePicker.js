@@ -2,7 +2,7 @@
 var svg = false;
 var force = false;
 
-var serverURL = "http://localhost:3000"
+var serverURL = "http://jsnetsim.herokuapp.com"
 
 var wipeOnNewLoad = false;
 

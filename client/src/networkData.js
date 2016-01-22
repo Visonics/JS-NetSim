@@ -97,38 +97,55 @@ var displayNetworkSettings = function() {
 // Meaning, it doesn't need to run on "every tickback"
 var updateNetwork = function(graph, nodeData) {
 
-  var changes = {};
   //  Calculate a new distance
-  var newDist = dist(nodeData.source.x, nodeData.source.y, nodeData.target.x, nodeData.target.y);
+  var changes = {};
+  changes.addedEdges = [];
+  changes.removedEdges = [];
 
   // Replace nodes with new x and y positions
-  graph.addNode(nodeData.source.name, nodeData.source);
-  graph.addNode(nodeData.target.name, nodeData.target);
+  graph.addNode(nodeData.name, nodeData);
+
 
   // console.log(nodeData.source.name);
 
-  // console.log(generalNetworkData.r, newDist);
-  // Remove edge in networkx if r is large
+  // graph.removeEdge(nodeData.name, );
+  // changes.removedEdge = [nodeData.source.name, nodeData.target.name];
 
-  if (generalNetworkData.r < newDist) {
+  // if (removed[nodeData.source.name + nodeData.target.name]) {
+  //   changes.addedEdge = [nodeData.source.name, nodeData.target.name]
+  //   removed[nodeData.source.name + nodeData.target.name] = false;
+  // }
 
-    if (!removed[nodeData.source.name + nodeData.target.name]) {
-      graph.removeEdge(nodeData.source.name, nodeData.target.name);
-      changes.removedEdge = [nodeData.source.name, nodeData.target.name];
-      removed[nodeData.source.name + nodeData.target.name] = true;
+  // graph.addEdge(nodeData.source.name, nodeData.target.name, {
+  //   weight: newDist
+  // });
+  if (generalNetworkData.r) {
+    var nodes = graph.nodes(true);
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i][0] === nodeData.name) {
+        continue;
+      }
+
+      var newDist = dist(nodes[i][1].x, nodes[i][1].y, nodeData.x, nodeData.y);
+
+      if (generalNetworkData.r > newDist) {
+        if (!removed[nodeData.name + nodes[i][0]]) {
+          changes.removedEdges.push([nodeData.name, nodes[i][0]]);
+          graph.removeEdge(nodeData.name, nodes[i][0]);
+          removed[nodeData.name + nodes[i][0]] = true;
+        }
+      } else {
+        if (removed[nodeData.name + nodes[i][0]]) {
+          changes.addedEdges.push([nodeData.name, nodes[i][0]]);
+          graph.addEdge(nodeData.name, nodes[i][0], {
+            weight: newDist
+          });
+          removed[nodeData.name + nodes[i][0]] = false;
+        }
+      }
+
     }
 
-
-  } else {
-    // replace the edge with new weight
-    if (removed[nodeData.source.name + nodeData.target.name]) {
-      changes.addedEdge = [nodeData.source.name, nodeData.target.name]
-      removed[nodeData.source.name + nodeData.target.name] = false;
-    }
-
-    graph.addEdge(nodeData.source.name, nodeData.target.name, {
-      weight: newDist
-    });
   }
 
 
