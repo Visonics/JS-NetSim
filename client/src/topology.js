@@ -152,9 +152,7 @@ var render = function(graph, options, name) {
   var updateVisuals = function(visualChanges) {
     if (visualChanges.addedEdges.length > 0) {
       visualChanges.addedEdges.forEach(function(element){
-
         addLink(element[0], element[1]);
-            
       })
       start();
     } 
@@ -167,6 +165,8 @@ var render = function(graph, options, name) {
     }
   }
 
+  // Instead of running on tick, we only run on drags.
+  // Way more efficient.
   drag.on('drag', function(d){
     var visualChanges = updateNetwork(graph, d);
     updateVisuals(visualChanges);
