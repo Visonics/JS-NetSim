@@ -93,11 +93,9 @@ var displayNetworkSettings = function() {
 
 }
 
-// TODO: Clean this up, and make it more efficient.
-// Meaning, it doesn't need to run on "every tickback"
+
 var updateNetwork = function(graph, nodeData) {
 
-  //  Calculate a new distance
   var changes = {};
   changes.addedEdges = [];
   changes.removedEdges = [];
@@ -105,21 +103,8 @@ var updateNetwork = function(graph, nodeData) {
   // Replace nodes with new x and y positions
   graph.addNode(nodeData.name, nodeData);
 
-
-  // console.log(nodeData.source.name);
-
-  // graph.removeEdge(nodeData.name, );
-  // changes.removedEdge = [nodeData.source.name, nodeData.target.name];
-
-  // if (removed[nodeData.source.name + nodeData.target.name]) {
-  //   changes.addedEdge = [nodeData.source.name, nodeData.target.name]
-  //   removed[nodeData.source.name + nodeData.target.name] = false;
-  // }
-
-  // graph.addEdge(nodeData.source.name, nodeData.target.name, {
-  //   weight: newDist
-  // });
   if (generalNetworkData.r) {
+
     var nodes = graph.nodes(true);
     for (var i = 0; i < nodes.length; i++) {
       if (nodes[i][0] === nodeData.name) {
@@ -127,20 +112,28 @@ var updateNetwork = function(graph, nodeData) {
       }
 
       var newDist = dist(nodes[i][1].x, nodes[i][1].y, nodeData.x, nodeData.y);
+      if (generalNetworkData.r < newDist) {
+        if (!removed[nodeData.name + nodes[i][0]] || !removed[nodeData.name + nodes[i][0]]) {
 
-      if (generalNetworkData.r > newDist) {
-        if (!removed[nodeData.name + nodes[i][0]]) {
-          changes.removedEdges.push([nodeData.name, nodes[i][0]]);
+          changes.removedEdges.push([nodeData.index, nodes[i][1].index]);
+          changes.removedEdges.push([nodes[i][1].index, nodeData.index]);
+
           graph.removeEdge(nodeData.name, nodes[i][0]);
+
           removed[nodeData.name + nodes[i][0]] = true;
+          removed[nodes[i][0] + nodeData.name] = true;
         }
       } else {
-        if (removed[nodeData.name + nodes[i][0]]) {
-          changes.addedEdges.push([nodeData.name, nodes[i][0]]);
+        if (removed[nodeData.name + nodes[i][0]] && removed[nodes[i][0] + nodeData.name]) {
+
+          changes.addedEdges.push([nodeData.index, nodes[i][1].index]);
           graph.addEdge(nodeData.name, nodes[i][0], {
             weight: newDist
           });
+
           removed[nodeData.name + nodes[i][0]] = false;
+          removed[nodes[i][0] + nodeData.name] = false;
+
         }
       }
 
@@ -150,6 +143,6 @@ var updateNetwork = function(graph, nodeData) {
 
 
   // Graph is mutated. No need to return. 
-  // TODO: return settings, which topology.js will read, and update svg accordingly.
+  // return settings, which topology.js will read, and update svg accordingly.
   return changes;
 }

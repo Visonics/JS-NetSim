@@ -62,40 +62,44 @@ var render = function(graph, options, name) {
   });
 
 
+  var circleNode = nodeElement("circle", ".circleNode", nodes, function(element) {
+    return element
+      .filter(function(d){return (d.shape === "circle")})
+      .attr("class", "node")
+      .attr("r", function(d) {d.fixed = true; return d.size/2})
+      .style("fill", function(d) { return d.color; })
+      .call(force.drag);
+  });
+
+  var squareNode = nodeElement("rect", ".sqrNode", nodes, function(element) {
+    return element
+      .filter(function(d){return (d.shape === "square")})
+      .attr("class", "node")
+      .attr("width", function(d) { return d.size })
+      .attr("height", function(d) { return d.size })
+      .style("fill", function(d) { d.fixed = true; return d.color; })
+      //.select("title")
+      //.text(function(d) { return d.id; })
+      .call(force.drag());
+  });
+
+
+  circleNode.append("title")
+      .text(function(d) { return d.name + "\nx= "+  d.x + ", y= " + d.y; });
+
+  squareNode.append("title")
+      .text(function(d) { return d.name + "\nx= "+  d.x + ", y= " + d.y; });
+
   var start = function() {
 
     var link = svg.selectAll(".link")
-        .data(links)
-        .enter().append("line")
-        .attr("class", "link");
+        .data(links);
 
-    var circleNode = nodeElement("circle", ".circleNode", nodes, function(element) {
-      return element
-        .filter(function(d){return (d.shape === "circle")})
-        .attr("class", "node")
-        .attr("r", function(d) {d.fixed = true; return d.size/2})
-        .style("fill", function(d) { return d.color; })
-        .call(force.drag);
-    });
+    link.enter().append("line")
+      .attr("class", "link");
 
-    var squareNode = nodeElement("rect", ".sqrNode", nodes, function(element) {
-      return element
-        .filter(function(d){return (d.shape === "square")})
-        .attr("class", "node")
-        .attr("width", function(d) { return d.size })
-        .attr("height", function(d) { return d.size })
-        .style("fill", function(d) { d.fixed = true; return d.color; })
-        //.select("title")
-        //.text(function(d) { return d.id; })
-        .call(force.drag());
-    });
+    link.exit().remove();
 
-
-    circleNode.append("title")
-        .text(function(d) { return d.name + "\nx= "+  d.x + ", y= " + d.y; });
-
-    squareNode.append("title")
-        .text(function(d) { return d.name + "\nx= "+  d.x + ", y= " + d.y; });
 
     force.on("tick", function() {
 
@@ -132,15 +136,42 @@ var render = function(graph, options, name) {
         .start();
   }
 
+  var addLink = function(sourceIndex, targetIndex) {
+    links.push({source: sourceIndex, target: targetIndex});
+  }
+
+  var removeLink = function(sourceIndex, targetIndex) {
+    for (var i = 0; i < links.length; i++) {
+      if ((links[i].source.index === sourceIndex && links[i].target.index === targetIndex) || 
+          (links[i].source.index === targetIndex && links[i].target.index === sourceIndex)) {
+        links.splice(i, 1);
+      }
+    }
+  }
+
+  var updateVisuals = function(visualChanges) {
+    if (visualChanges.addedEdges.length > 0) {
+      visualChanges.addedEdges.forEach(function(element){
+
+        addLink(element[0], element[1]);
+            
+      })
+      console.log(visualChanges.addedEdges);
+      start();
+    } 
+
+    if (visualChanges.removedEdges.length > 0) {
+      visualChanges.removedEdges.forEach(function(element){
+        removeLink(element[0], element[1]);
+      })
+      console.log(visualChanges.removedEdges)
+      start();
+    }
+  }
+
   drag.on('drag', function(d){
     var visualChanges = updateNetwork(graph, d);
-    if (visualChanges.addedEdges.length > 0) {
-      console.log('ADDED');
-
-    } else if (visualChanges.removedEdges.length > 0) {
-      console.log('REMOVED');
-    }
-
+    updateVisuals(visualChanges);
   });
 
   start();
