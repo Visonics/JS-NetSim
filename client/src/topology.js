@@ -6,24 +6,20 @@
 //
 /////////////////////
 
-var width = 700,
-    height = 400;
-
 var color = d3.scale.category20();
 
-var force = d3.layout.force()
-    .alpha(0)
-    .size([width, height]);
-
-var drag = force.drag();
 
 var targetSvgId = "graph"
 
 var nodeElement = function (shape, classType, data, attrfn) {
   var newNode;
   newNode = svg.selectAll(classType)
-    .data(data)
-  .enter().append(shape);
+    .data(data);
+
+  newNode.enter().append(shape);
+
+  newNode.exit()
+  .remove();
 
   return attrfn(newNode);
 }
@@ -37,17 +33,25 @@ var render = function(graph, options, name) {
     $(".networkview").addClass("svgborder");
   }
 
+
   if (options) {
     setPane(svg, options);
   }
 
+  if (!force) {
+    force = d3.layout.force()
+    .alpha(0)
+    .size([options.width, options.height]);
+  }
+
+  var drag = force.drag();
+  
   if (name) {
     // $('#graphName').text(name);
   }
 
   var nodes = [],
-      links = [],
-      bilinks = [];
+      links = [];
 
   graph.nodes(true).forEach(function(item){
     nodes.push(item[1]);
@@ -57,18 +61,6 @@ var render = function(graph, options, name) {
     links.push({source: item[2].source, target: item[2].target});
   });
 
-  force
-      .nodes(nodes)
-      .links(links)
-      .start();
-
-  var link = svg.selectAll(".link")
-      .data(links)
-      .enter().append("line")
-      .attr("class", "link")
-      .style("color", "black")
-      .style("stroke-color", "black")
-      .style("stroke-dotarray", "5,5");
 
   var circleNode = nodeElement("circle", ".circleNode", nodes, function(element) {
     return element
@@ -91,21 +83,6 @@ var render = function(graph, options, name) {
       .call(force.drag());
   });
 
-  var updateVisuals = function(data, link) {
-
-    if (data.removedEdge) {
-
-      var link = link.filter(function(d){ 
-        return d.source.name === data.removedEdge[0] && d.target.name === data.removedEdge[1]
-      })
-      link.style("stroke", "none");
-    } else if (data.addedEdge) {
-
-      var link = link.filter(function(d){ 
-        return d.source.name === data.addedEdge[0] && d.target.name === data.addedEdge[1]
-      })
-      link.style("stroke", "#bbb");    }
-  }
 
   circleNode.append("title")
       .text(function(d) { return d.name + "\nx= "+  d.x + ", y= " + d.y; });
@@ -113,36 +90,89 @@ var render = function(graph, options, name) {
   squareNode.append("title")
       .text(function(d) { return d.name + "\nx= "+  d.x + ", y= " + d.y; });
 
-  force.on("tick", function() {
+  var start = function() {
 
-    link.attr("x1", function(d) { 
-      // Utilize the ticks in D3 to update JSNetworkX Graph
-      var changes = updateNetwork(graph, d);
-      updateVisuals(changes, link);
-      return d.source.x; 
-    })
+    var link = svg.selectAll(".link")
+        .data(links);
 
-    .attr("y1", function(d) { 
-      return d.source.y; 
-    })
+    link.enter().append("line")
+      .attr("class", "link");
 
-    .attr("x2", function(d) {
-      return d.target.x; 
-    })
+    link.exit().remove();
 
-    .attr("y2", function(d) {
-     return d.target.y; 
+
+    force.on("tick", function() {
+
+      link.attr("x1", function(d) { 
+        // Utilize the ticks in D3 to update JSNetworkX Graph
+        return d.source.x; 
+      })
+
+      .attr("y1", function(d) { 
+        return d.source.y; 
+      })
+
+      .attr("x2", function(d) {
+        return d.target.x; 
+      })
+
+      .attr("y2", function(d) {
+       return d.target.y; 
+      });
+
+      circleNode.attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      });
+
+      squareNode.attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      });
+
     });
+    
+    force
+        .nodes(nodes)
+        .links(links)
+        .start();
+  }
 
-    circleNode.attr("transform", function(d) {
-      return "translate(" + d.x + "," + d.y + ")";
-    });
+  var addLink = function(sourceIndex, targetIndex) {
+    links.push({source: sourceIndex, target: targetIndex});
+  }
 
-    squareNode.attr("transform", function(d) {
-      return "translate(" + d.x + "," + d.y + ")";
-    });
+  var removeLink = function(sourceIndex, targetIndex) {
+    for (var i = 0; i < links.length; i++) {
+      if ((links[i].source.index === sourceIndex && links[i].target.index === targetIndex) || 
+          (links[i].source.index === targetIndex && links[i].target.index === sourceIndex)) {
+        links.splice(i, 1);
+      }
+    }
+  }
 
+  var updateVisuals = function(visualChanges) {
+    if (visualChanges.addedEdges.length > 0) {
+      visualChanges.addedEdges.forEach(function(element){
+        addLink(element[0], element[1]);
+      })
+      start();
+    } 
+
+    if (visualChanges.removedEdges.length > 0) {
+      visualChanges.removedEdges.forEach(function(element){
+        removeLink(element[0], element[1]);
+      })
+      start();
+    }
+  }
+
+  // Instead of running on tick, we only run on drags.
+  // Way more efficient.
+  drag.on('drag', function(d){
+    var visualChanges = updateNetwork(graph, d);
+    updateVisuals(visualChanges);
   });
+
+  start();
 
 }
 

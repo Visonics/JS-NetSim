@@ -1,0 +1,144 @@
+{
+    "directed": false, 
+    "graph": {
+        "width": 500, 
+        "drag": true, 
+        "r": 150, 
+        "name": "Grid Topology-N=9, R=150 m", 
+        "height": 500
+    }, 
+    "nodes": [
+        {
+            "name": "0", 
+            "color": "blue", 
+            "shape": "square", 
+            "y": 375.0, 
+            "x": 125.0, 
+            "id": 0, 
+            "size": 10
+        }, 
+        {
+            "name": "1", 
+            "color": "blue", 
+            "shape": "square", 
+            "y": 250.0, 
+            "x": 125.0, 
+            "id": 1, 
+            "size": 10
+        }, 
+        {
+            "name": "2", 
+            "color": "blue", 
+            "shape": "square", 
+            "y": 125.0, 
+            "x": 125.0, 
+            "id": 2, 
+            "size": 10
+        }, 
+        {
+            "name": "3", 
+            "color": "blue", 
+            "shape": "square", 
+            "y": 375.0, 
+            "x": 250.0, 
+            "id": 3, 
+            "size": 10
+        }, 
+        {
+            "name": "4", 
+            "color": "blue", 
+            "shape": "square", 
+            "y": 125.0, 
+            "x": 250.0, 
+            "id": 4, 
+            "size": 10
+        }, 
+        {
+            "name": "5", 
+            "color": "blue", 
+            "shape": "square", 
+            "y": 375.0, 
+            "x": 375.0, 
+            "id": 5, 
+            "size": 10
+        }, 
+        {
+            "name": "6", 
+            "color": "blue", 
+            "shape": "square", 
+            "y": 250.0, 
+            "x": 375.0, 
+            "id": 6, 
+            "size": 10
+        }, 
+        {
+            "name": "7", 
+            "color": "blue", 
+            "shape": "square", 
+            "y": 125.0, 
+            "x": 375.0, 
+            "id": 7, 
+            "size": 10
+        }, 
+        {
+            "name": "8", 
+            "color": "red", 
+            "shape": "circle", 
+            "y": 250.0, 
+            "x": 250.0, 
+            "id": 8, 
+            "size": 15
+        }
+    ], 
+    "links": [
+        {
+            "source": 3, 
+            "target": 8
+        }, 
+        {
+            "source": 3, 
+            "target": 0
+        }, 
+        {
+            "source": 3, 
+            "target": 5
+        }, 
+        {
+            "source": 6, 
+            "target": 8
+        }, 
+        {
+            "source": 6, 
+            "target": 7
+        }, 
+        {
+            "source": 6, 
+            "target": 5
+        }, 
+        {
+            "source": 1, 
+            "target": 8
+        }, 
+        {
+            "source": 1, 
+            "target": 0
+        }, 
+        {
+            "source": 1, 
+            "target": 2
+        }, 
+        {
+            "source": 8, 
+            "target": 4
+        }, 
+        {
+            "source": 7, 
+            "target": 4
+        }, 
+        {
+            "source": 4, 
+            "target": 2
+        }
+    ], 
+    "multigraph": false
+}

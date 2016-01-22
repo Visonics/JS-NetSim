@@ -27,11 +27,9 @@ var NetworkXGenerator = function(networkJSON) {
   });
 
   // See if r exists, and save it.
-  if (networkJSON.r) {
-    generalNetworkData.r = networkJSON.r;
-  } else {
-    generalNetworkData.r = Infinity;
-  }
+  if (networkJSON.graph.r) {
+    generalNetworkData.r = networkJSON.graph.r;
+  } 
 
   // Our edge weight will be defined using distance between coordiantes.
   // See pythagorean theorom
@@ -95,43 +93,73 @@ var displayNetworkSettings = function() {
 
 }
 
-// TODO: Clean this up, and make it more efficient.
-// Meaning, it doesn't need to run on "every tickback"
+
 var updateNetwork = function(graph, nodeData) {
 
   var changes = {};
-  //  Calculate a new distance
-  var newDist = dist(nodeData.source.x, nodeData.source.y, nodeData.target.x, nodeData.target.y);
+  changes.addedEdges = [];
+  changes.removedEdges = [];
 
   // Replace nodes with new x and y positions
-  graph.addNode(nodeData.source.name, nodeData.source);
-  graph.addNode(nodeData.target.name, nodeData.target);
+  graph.addNode(nodeData.name, nodeData);
 
-  // console.log(generalNetworkData.r, newDist);
-  // Remove edge in networkx if r is large
-  if (generalNetworkData.r < newDist) {
+  // Begin by checking if r exists anywhere.
+  if (generalNetworkData.r) {
 
-    if (!removed[nodeData.source.name + nodeData.target.name]) {
-      graph.removeEdge(nodeData.source.name, nodeData.target.name);
-      changes.removedEdge = [nodeData.source.name, nodeData.target.name];
-      removed[nodeData.source.name + nodeData.target.name] = true;
+    // Get nodes from jsnetwork data structure
+    var nodes = graph.nodes(true);
+    for (var i = 0; i < nodes.length; i++) {
+
+      // Skip over the current node. 
+      if (nodes[i][0] === nodeData.name) {
+        continue;
+      }
+
+      // Calculate distance for every node. 
+      var newDist = dist(nodes[i][1].x, nodes[i][1].y, nodeData.x, nodeData.y);
+
+      if (generalNetworkData.r < newDist) {
+
+        // We check both combinations against the hash table.
+        // Protects against bi-links. 
+        if (!removed[nodeData.name + nodes[i][0]] || !removed[nodeData.name + nodes[i][0]]) {
+
+          // Remove bi-links, again. That's why there are two remove edges.
+          changes.removedEdges.push([nodeData.index, nodes[i][1].index]);
+          changes.removedEdges.push([nodes[i][1].index, nodeData.index]);
+
+          // Remvoe link from data structure
+          graph.removeEdge(nodeData.name, nodes[i][0]);
+
+          // Set them to removed
+          removed[nodeData.name + nodes[i][0]] = true;
+          removed[nodes[i][0] + nodeData.name] = true;
+        }
+
+      } else {
+        // Only run if both possible links are not there.
+        if (removed[nodeData.name + nodes[i][0]] && removed[nodes[i][0] + nodeData.name]) {
+
+          // Add the edge to changes.
+          changes.addedEdges.push([nodeData.index, nodes[i][1].index]);
+
+          // Update the structure with the distance as the weight
+          graph.addEdge(nodeData.name, nodes[i][0], {
+            weight: newDist
+          });
+
+          removed[nodeData.name + nodes[i][0]] = false;
+          removed[nodes[i][0] + nodeData.name] = false;
+
+        }
+      }
+
     }
 
-
-  } else {
-    // replace the edge with new weight
-    if (removed[nodeData.source.name + nodeData.target.name]) {
-      changes.addedEdge = [nodeData.source.name, nodeData.target.name]
-      removed[nodeData.source.name + nodeData.target.name] = false;
-    }
-
-    graph.addEdge(nodeData.source.name, nodeData.target.name, {
-      weight: newDist
-    });
   }
 
 
   // Graph is mutated. No need to return. 
-  // TODO: return settings, which topology.js will read, and update svg accordingly.
+  // return settings, which topology.js will read, and update svg accordingly.
   return changes;
 }

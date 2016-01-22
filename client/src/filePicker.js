@@ -1,7 +1,8 @@
 // This will change based on what a user picks...
 var svg = false;
+var force = false;
 
-var serverURL = "http://localhost:3000"
+var serverURL = "http://jsnetsim.herokuapp.com"
 
 var wipeOnNewLoad = false;
 
@@ -13,7 +14,7 @@ var clearpane = function(){
   $('.networkview').empty();
   $(".networkview").removeClass("svgborder");
   svg = false;
-
+  force = false;
 }
 
 var makeRadioDiv = function(name) {
@@ -53,7 +54,8 @@ var showModal = function() {
 var displayNetwork = function(graphData) {
   if (!wipeOnNewLoad) wipeOnNewLoad = true;
   var network = NetworkXGenerator(graphData);
-  render(network, {wipeOnNewLoad: wipeOnNewLoad, width: graphData.height, height: graphData.width}, graphData.graph.name);
+  render(network, {wipeOnNewLoad: wipeOnNewLoad, width: graphData.graph.width,
+    height: graphData.graph.height}, graphData.graph.name);
 }
 
 var loadFile = function() {

@@ -1,7 +1,8 @@
 {
     "directed": false, 
     "graph": {
-        "name": "2 node lol graph"
+        "name": "2 node lol graph",
+        "r": 180
     },
     "nodes": [
         {
@@ -29,6 +30,5 @@
             "target": 1
         }
     ],
-    "multigraph": false,
-    "r": 180
+    "multigraph": false
 }
