@@ -8,6 +8,19 @@ var wipeOnNewLoad = false;
 
 var JSONLoaded = false;
 
+$( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+
+  var $target = $( event.currentTarget );
+
+  $target.closest( '.btn-group' )
+     .find( '[data-bind="label"]' ).text( $target.text() )
+        .end()
+     .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+
+  return false;
+
+});
+
 var clearpane = function(){
   JSONLoaded = false;
   changeLoadButton();
@@ -19,6 +32,10 @@ var clearpane = function(){
 
 var makeRadioDiv = function(name) {
   return '<div class="radio"><label><input type="radio" name="optradio" value="' + name + '">' + name + '</label></div>';
+}
+
+var makeDropdownDiv = function(name) {
+  return '<li><a href="#">' + name + '</a></li>'
 }
 
 var changeLoadButton = function() {
@@ -40,7 +57,7 @@ var showModal = function() {
       success: function(data) {
         $('.server-selection').empty();
         data.forEach(function(element){
-          $('.server-selection').append(makeRadioDiv(element));
+          $('.server-selection').append(makeDropdownDiv(element));
         })
       }
     })
@@ -63,7 +80,7 @@ var loadFile = function() {
   $('#filePickerModal').modal('hide');
 
 
-  var serverDataFile = $('input[name=optradio]:checked', '.server-selection').val();
+  var serverDataFile = $('#data-file-label').text();
   if (serverDataFile) {
     $.ajax({
       url: serverURL + '/data/' + serverDataFile,
