@@ -156,7 +156,6 @@ var render = function(graph, options, name) {
         addLink(element[0], element[1]);
             
       })
-      console.log(visualChanges.addedEdges);
       start();
     } 
 
@@ -164,7 +163,6 @@ var render = function(graph, options, name) {
       visualChanges.removedEdges.forEach(function(element){
         removeLink(element[0], element[1]);
       })
-      console.log(visualChanges.removedEdges)
       start();
     }
   }
