@@ -26,6 +26,8 @@ var clearpane = function(){
   changeLoadButton();
   $('.networkview').empty();
   $(".networkview").removeClass("svgborder");
+  $(".networkview").removeClass("svgborder");
+  $("#graphName").text("");
   svg = false;
   force = false;
 }
@@ -72,7 +74,7 @@ var displayNetwork = function(graphData) {
   if (!wipeOnNewLoad) wipeOnNewLoad = true;
   var network = NetworkXGenerator(graphData);
   render(network, {wipeOnNewLoad: wipeOnNewLoad, width: graphData.graph.width,
-    height: graphData.graph.height}, graphData.graph.name);
+    height: graphData.graph.height}, graphData.graph);
 }
 
 var loadFile = function() {
@@ -81,7 +83,7 @@ var loadFile = function() {
 
 
   var serverDataFile = $('#data-file-label').text();
-  if (serverDataFile) {
+  if (serverDataFile != "Select One") {
     $.ajax({
       url: serverURL + '/data/' + serverDataFile,
       success: function(data) {
@@ -117,8 +119,8 @@ var loadFile = function() {
 
     if (!file || file.type !== "application/json") {
       //Farrukh - I need to comment following 2 lines to make it work
-      //alert("Pick a file, and ensure that it is type json");
-      //return;
+      alert("Pick a file, and ensure that it is type json");
+      return;
     }
 
     fr = new FileReader();
@@ -134,4 +136,6 @@ var loadFile = function() {
     displayNetwork(graphData);
   }
 }
+
+
 

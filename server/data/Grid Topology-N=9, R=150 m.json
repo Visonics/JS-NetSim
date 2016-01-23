@@ -2,7 +2,7 @@
     "directed": false, 
     "graph": {
         "width": 500, 
-        "drag": true, 
+        "drag": false, 
         "r": 150, 
         "name": "Grid Topology-N=9, R=150 m", 
         "height": 500

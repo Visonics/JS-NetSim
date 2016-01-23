@@ -24,7 +24,7 @@ var nodeElement = function (shape, classType, data, attrfn) {
   return attrfn(newNode);
 }
 
-var render = function(graph, options, name) {
+var render = function(graph, options, settings) {
 
   if (!svg) {
     svg = d3.select(".networkview").append("svg")
@@ -32,6 +32,7 @@ var render = function(graph, options, name) {
 
     $(".networkview").addClass("svgborder");
   }
+
 
   ww = options.width;
   if (options) {
@@ -46,8 +47,8 @@ var render = function(graph, options, name) {
 
   var drag = force.drag();
   
-  if (name) {
-     $('#graphName').text(name);
+  if (settings.name) {
+     $('#graphName').text(settings.name);
   }
 
   var nodes = [],
@@ -63,24 +64,32 @@ var render = function(graph, options, name) {
 
 
   var circleNode = nodeElement("circle", ".circleNode", nodes, function(element) {
-    return element
+    element = element
       .filter(function(d){return (d.shape === "circle")})
       .attr("class", "node")
       .attr("r", function(d) {d.fixed = true; return d.size/2})
       .style("fill", function(d) { return d.color; })
-      .call(force.drag);
+
+    if (settings.drag) {
+      element.call(force.drag());
+    }
+    
+    return element;
   });
 
   var squareNode = nodeElement("rect", ".sqrNode", nodes, function(element) {
-    return element
+    element = element
       .filter(function(d){return (d.shape === "square")})
       .attr("class", "node")
       .attr("width", function(d) { return d.size })
       .attr("height", function(d) { return d.size })
-      .style("fill", function(d) { d.fixed = true; return d.color; })
-      //.select("title")
-      //.text(function(d) { return d.id; })
-      .call(force.drag());
+      .style("fill", function(d) { d.fixed = true; return d.color; });
+
+      if (settings.drag) {
+        element.call(force.drag());
+      }
+
+      return element;
   });
 
 
@@ -173,7 +182,9 @@ var render = function(graph, options, name) {
     updateVisuals(visualChanges);
   });
 
+
   start();
+
 
 }
 

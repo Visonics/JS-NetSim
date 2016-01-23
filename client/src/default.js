@@ -8,10 +8,11 @@
 /////////////////////
 //
 
-graphData = {
+var graphData = {
     "graph": {
         "name": "A Sample Network (move nodes to make a ring)",
-        "r": 250
+        "r": 250,
+        "drag": true
     },
     "nodes": [
         {
@@ -71,5 +72,4 @@ graphData = {
     ]
 }
 
-var network = NetworkXGenerator(graphData);
-render(network, {wipeOnNewLoad: true, width: graphData.graph.width, height: graphData.graph.height}, graphData.graph.name);
+displayNetwork(graphData);
