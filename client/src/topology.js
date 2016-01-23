@@ -7,7 +7,7 @@
 /////////////////////
 
 var color = d3.scale.category20();
-
+var ww = 0;
 
 var targetSvgId = "graph"
 
@@ -33,7 +33,7 @@ var render = function(graph, options, name) {
     $(".networkview").addClass("svgborder");
   }
 
-
+  ww = options.width;
   if (options) {
     setPane(svg, options);
   }
@@ -47,7 +47,7 @@ var render = function(graph, options, name) {
   var drag = force.drag();
   
   if (name) {
-    // $('#graphName').text(name);
+     $('#graphName').text(name);
   }
 
   var nodes = [],
@@ -96,7 +96,8 @@ var render = function(graph, options, name) {
         .data(links);
 
     link.enter().append("line")
-      .attr("class", "link");
+      .attr("class", "link")
+      .style("stroke-dasharray", ("5, 5"));
 
     link.exit().remove();
 
