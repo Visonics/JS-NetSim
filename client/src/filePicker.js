@@ -53,6 +53,8 @@ var showModal = function() {
   if (!JSONLoaded) {
 
     $('#filePickerModal').modal('show');
+    $('#data-file-label').text("Select One");
+    
 
     $.ajax({
       url: serverURL + '/data',
