@@ -30,6 +30,10 @@ var NetworkXGenerator = function(networkJSON) {
   if (networkJSON.graph.r) {
     generalNetworkData.r = networkJSON.graph.r;
   }
+
+  if (networkJSON.graph.name) {
+    generalNetworkData.name = networkJSON.graph.name;
+  }
    
 
   // Our edge weight will be defined using distance between coordiantes.
@@ -77,6 +81,11 @@ var updateNetworkSettings = function() {
       generalNetworkData[key] = $('#' + key).val();
     }
   }
+
+  if (generalNetworkData.name) {
+    $("#graphName").text(generalNetworkData.name);
+  }
+
 }
 
 
