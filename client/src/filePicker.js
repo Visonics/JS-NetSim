@@ -8,17 +8,36 @@ var wipeOnNewLoad = false;
 
 var JSONLoaded = false;
 
+$( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+
+  var $target = $( event.currentTarget );
+
+  $target.closest( '.btn-group' )
+     .find( '[data-bind="label"]' ).text( $target.text() )
+        .end()
+     .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+
+  return false;
+
+});
+
 var clearpane = function(){
   JSONLoaded = false;
   changeLoadButton();
   $('.networkview').empty();
   $(".networkview").removeClass("svgborder");
+  $(".networkview").removeClass("svgborder");
+  $("#graphName").text("");
   svg = false;
   force = false;
 }
 
 var makeRadioDiv = function(name) {
   return '<div class="radio"><label><input type="radio" name="optradio" value="' + name + '">' + name + '</label></div>';
+}
+
+var makeDropdownDiv = function(name) {
+  return '<li><a href="#">' + name + '</a></li>'
 }
 
 var changeLoadButton = function() {
@@ -34,13 +53,15 @@ var showModal = function() {
   if (!JSONLoaded) {
 
     $('#filePickerModal').modal('show');
+    $('#data-file-label').text("Select One");
+    
 
     $.ajax({
       url: serverURL + '/data',
       success: function(data) {
         $('.server-selection').empty();
         data.forEach(function(element){
-          $('.server-selection').append(makeRadioDiv(element));
+          $('.server-selection').append(makeDropdownDiv(element));
         })
       }
     })
@@ -55,7 +76,7 @@ var displayNetwork = function(graphData) {
   if (!wipeOnNewLoad) wipeOnNewLoad = true;
   var network = NetworkXGenerator(graphData);
   render(network, {wipeOnNewLoad: wipeOnNewLoad, width: graphData.graph.width,
-    height: graphData.graph.height}, graphData.graph.name);
+    height: graphData.graph.height}, graphData.graph);
 }
 
 var loadFile = function() {
@@ -63,8 +84,8 @@ var loadFile = function() {
   $('#filePickerModal').modal('hide');
 
 
-  var serverDataFile = $('input[name=optradio]:checked', '.server-selection').val();
-  if (serverDataFile) {
+  var serverDataFile = $('#data-file-label').text();
+  if (serverDataFile != "Select One") {
     $.ajax({
       url: serverURL + '/data/' + serverDataFile,
       success: function(data) {
@@ -100,8 +121,8 @@ var loadFile = function() {
 
     if (!file || file.type !== "application/json") {
       //Farrukh - I need to comment following 2 lines to make it work
-      //alert("Pick a file, and ensure that it is type json");
-      //return;
+      alert("Pick a file, and ensure that it is type json");
+      return;
     }
 
     fr = new FileReader();
@@ -117,4 +138,6 @@ var loadFile = function() {
     displayNetwork(graphData);
   }
 }
+
+
 

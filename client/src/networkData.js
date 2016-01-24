@@ -29,7 +29,12 @@ var NetworkXGenerator = function(networkJSON) {
   // See if r exists, and save it.
   if (networkJSON.graph.r) {
     generalNetworkData.r = networkJSON.graph.r;
-  } 
+  }
+
+  if (networkJSON.graph.name) {
+    generalNetworkData.name = networkJSON.graph.name;
+  }
+   
 
   // Our edge weight will be defined using distance between coordiantes.
   // See pythagorean theorom
@@ -66,16 +71,24 @@ var NetworkXGenerator = function(networkJSON) {
 
 }
 
+
 // These network settings methods play with the modal. They are aspects of a view.
 // TODO: Maybe use backbone for MVC setup. Or React
+
 var updateNetworkSettings = function() {
-  debugger;
   for (var key in generalNetworkData) {
     if ($('#' + key).val()) {
       generalNetworkData[key] = $('#' + key).val();
     }
   }
+
+  if (generalNetworkData.name) {
+    $("#graphName").text(generalNetworkData.name);
+  }
+
 }
+
+
 
 var displayNetworkSettings = function() {
   
