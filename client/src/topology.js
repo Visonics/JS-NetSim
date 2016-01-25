@@ -201,6 +201,11 @@ var render = function(graph, options, settings) {
 
   start();
 
+  // Called when settings are changed.
+  // Look at networkData.js
+  updateLinksCallback = function() {
+    updateCompleteNetwork(graph);
+  }
 
   var updateCompleteNetwork = function(graph) {
     d3.selectAll(".node").each(function(d){
