@@ -13,7 +13,7 @@ var targetSvgId = "graph"
 
 var nodeElement = function (shape, classType, data, attrfn) {
   var newNode;
-  newNode = svg.selectAll(classType)
+  newNode = svg.selectAll(".node" + classType)
     .data(data);
 
   newNode.enter().append(shape);
@@ -190,6 +190,7 @@ var render = function(graph, options, settings) {
     }
   }
 
+
   // Instead of running on tick, we only run on drags.
   // Way more efficient.
   drag.on('drag', function(d){
@@ -201,6 +202,14 @@ var render = function(graph, options, settings) {
   start();
 
 
+  var updateCompleteNetwork = function(graph) {
+    d3.selectAll(".node").each(function(d){
+      var visualChanges = updateNetwork(graph, d);
+      updateVisuals(visualChanges);
+    })
+  }
+
+  updateCompleteNetwork(graph);
 }
 
 

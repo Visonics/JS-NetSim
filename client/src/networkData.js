@@ -1,6 +1,4 @@
 var generalNetworkData = {};
-var removed = {};
-
 
 var dist = function(x1, y1, x2, y2) {
   if (!x2) x2 = 0;
@@ -135,7 +133,7 @@ var updateNetwork = function(graph, nodeData) {
 
         // We check both combinations against the hash table.
         // Protects against bi-links. 
-        if (!removed[nodeData.name + nodes[i][0]] || !removed[nodeData.name + nodes[i][0]]) {
+        if (graph.hasEdge(nodes[i][0], nodeData.name)) {
 
           // Remove bi-links, again. That's why there are two remove edges.
           changes.removedEdges.push([nodeData.index, nodes[i][1].index]);
@@ -145,13 +143,12 @@ var updateNetwork = function(graph, nodeData) {
           graph.removeEdge(nodeData.name, nodes[i][0]);
 
           // Set them to removed
-          removed[nodeData.name + nodes[i][0]] = true;
-          removed[nodes[i][0] + nodeData.name] = true;
         }
 
       } else {
         // Only run if both possible links are not there.
-        if (removed[nodeData.name + nodes[i][0]] && removed[nodes[i][0] + nodeData.name]) {
+
+        if (!graph.hasEdge(nodes[i][0], nodeData.name)) {
 
           // Add the edge to changes.
           changes.addedEdges.push([nodeData.index, nodes[i][1].index]);
@@ -160,9 +157,6 @@ var updateNetwork = function(graph, nodeData) {
           graph.addEdge(nodeData.name, nodes[i][0], {
             weight: newDist
           });
-
-          removed[nodeData.name + nodes[i][0]] = false;
-          removed[nodes[i][0] + nodeData.name] = false;
 
         }
       }
@@ -176,3 +170,4 @@ var updateNetwork = function(graph, nodeData) {
   // return settings, which topology.js will read, and update svg accordingly.
   return changes;
 }
+
