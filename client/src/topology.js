@@ -13,7 +13,7 @@ var targetSvgId = "graph"
 
 var nodeElement = function (shape, classType, data, attrfn) {
   var newNode;
-  newNode = svg.selectAll(classType)
+  newNode = svg.selectAll(".node" + classType)
     .data(data);
 
   newNode.enter().append(shape);
@@ -33,7 +33,15 @@ var render = function(graph, options, settings) {
     $(".networkview").addClass("svgborder");
   }
 
+  if (!options.width) {
+    options.width = 650;
+  }
 
+  if (!options.height) {
+    options.height = 500;
+  }
+
+  var radiusBorder = 6;
   ww = options.width;
   if (options) {
     setPane(svg, options);
@@ -114,8 +122,7 @@ var render = function(graph, options, settings) {
     force.on("tick", function() {
 
       link.attr("x1", function(d) { 
-        // Utilize the ticks in D3 to update JSNetworkX Graph
-        return d.source.x; 
+        return d.source.x;
       })
 
       .attr("y1", function(d) { 
@@ -127,15 +134,23 @@ var render = function(graph, options, settings) {
       })
 
       .attr("y2", function(d) {
-       return d.target.y; 
+        return d.target.y; 
       });
 
-      circleNode.attr("transform", function(d) {
-        return "translate(" + d.x + "," + d.y + ")";
+
+      circleNode.attr("cx", function(d) {
+        return d.x = Math.max(radiusBorder, Math.min(options.width - radiusBorder, d.x)); 
+      })
+      .attr("cy", function(d) { 
+        return d.y = Math.max(radiusBorder, Math.min(options.height - radiusBorder, d.y)); 
       });
 
-      squareNode.attr("transform", function(d) {
-        return "translate(" + d.x + "," + d.y + ")";
+
+      squareNode.attr("x", function(d) {
+        return d.x = Math.max(radiusBorder, Math.min(options.width - radiusBorder, d.x)); 
+      })
+      .attr("y", function(d) { 
+        return d.y = Math.max(radiusBorder, Math.min(options.height - radiusBorder, d.y)); 
       });
 
     });
@@ -175,6 +190,7 @@ var render = function(graph, options, settings) {
     }
   }
 
+
   // Instead of running on tick, we only run on drags.
   // Way more efficient.
   drag.on('drag', function(d){
@@ -185,7 +201,20 @@ var render = function(graph, options, settings) {
 
   start();
 
+  // Called when settings are changed.
+  // Look at networkData.js
+  updateLinksCallback = function() {
+    updateCompleteNetwork(graph);
+  }
 
+  var updateCompleteNetwork = function(graph) {
+    d3.selectAll(".node").each(function(d){
+      var visualChanges = updateNetwork(graph, d);
+      updateVisuals(visualChanges);
+    })
+  }
+
+  updateCompleteNetwork(graph);
 }
 
 
