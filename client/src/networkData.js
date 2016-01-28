@@ -87,7 +87,11 @@ var updateNetworkSettings = function () {
         $("#graphName").text(generalNetworkData.graph.name + ", r = " +
             generalNetworkData.graph.r + ", Drag = " + generalNetworkData.graph.drag);
     }
-    updateLinksCallback(generalNetworkData.graph['drag']);
+    options =  {
+        wipeOnNewLoad: false, width: generalNetworkData.graph.width,
+        height: generalNetworkData.graph.height, drag: generalNetworkData.graph['drag']
+    }
+    updateLinksCallback(options);
 }
 
 var displayNetworkSettings = function () {

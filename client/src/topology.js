@@ -233,8 +233,10 @@ var render = function (graph, options, settings) {
 
     // Called when settings are changed.
     // Look at networkData.js
-    updateLinksCallback = function (drag) {
-        if (drag)
+    updateLinksCallback = function (new_options) {
+        options = new_options;
+        setPane(svg, options);
+        if (options.drag)
             d3.selectAll('.node').call(force.drag);
         else
             d3.selectAll('.node').on('mousedown.drag', null);

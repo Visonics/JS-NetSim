@@ -50,7 +50,7 @@ var changeLoadButton = function () {
 }
 
 var showModal = function () {
-    if (!JSONLoaded) {
+   // if (!JSONLoaded) {
 
         $('#filePickerModal').modal('show');
         $('#data-file-label').text("Select One");
@@ -66,10 +66,10 @@ var showModal = function () {
             }
         })
 
-    } else {
-        displayNetworkSettings();
-        $('#graphSettingsModal').modal('show');
-    }
+    //} else {
+   //     displayNetworkSettings();
+  //      $('#graphSettingsModal').modal('show');
+  //  }
 }
 
 var displayNetwork = function (graphData) {
