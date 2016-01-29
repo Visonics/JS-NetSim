@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,129 +17,145 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
-  <body>
-    <div class="container">
-      <div class="header clearfix">
+</head>
+<body>
+<div class="container">
+    <div class="header clearfix">
         <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="#">Home</a></li>
-            <li role="presentation"><a href="#">About</a></li>
-            <li role="presentation"><a href="#">Contact</a></li>
-          </ul>
+            <ul class="nav nav-pills pull-right">
+                <li role="presentation" class="active"><a href="#">Home</a></li>
+                <li role="presentation"><a href="#">About</a></li>
+                <li role="presentation"><a href="#">Contact</a></li>
+            </ul>
         </nav>
         <h3 class="text-muted">JS-Netsim</h3>
-      </div>
-      <div class="jumbotron">
+    </div>
+    <div class="jumbotron">
         <h1>Simulate Networks</h1>
+
         <p class="lead">JS-Netsim allows you to display complex networks by loading JSON from a server,
-        or importing it from your PC.</p>
-        <p><a class="btn btn-lg btn-success" href="#" id="loadbutton" role="button" onclick="showModal()">Load JSON</a></p>
+            or importing it from your PC.</p>
+
+        <p>
+            <span><a class="btn btn-lg btn-success" href="#" id="loadbutton" role="button" onclick="showModal()">Load
+                JSON</a></span>
+            <span><a class="btn btn-lg btn-success" href="#" id="setbutton" role="button"
+                     onclick="displayNetworkSettings()">Settings</a></span>
+            <span><a class="btn btn-lg btn-success" href="#" id="saveJson" role="button">Save JSON</a></span>
+        </p>
+    </div>
+    <div id="graphName" class="text-center">
+    </div>
+    <div class="networkview">
+    </div>
+    <!--
+    <div class="row marketing">
+      <div class="col-lg-6">
+        <h4>Subheading</h4>
+        <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+        <h4>Subheading</h4>
+        <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
       </div>
-      <div id="graphName" class="text-center">
+      <div class="col-lg-6">
+        <h4>Subheading</h4>
+        <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+        <h4>Subheading</h4>
+        <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
       </div>
-      <div class="networkview">
-      </div>
-      <!--
-      <div class="row marketing">
-        <div class="col-lg-6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
-        </div>
-        <div class="col-lg-6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-        </div>
-      </div>-->
-      <footer class="footer">
+    </div>-->
+    <footer class="footer">
         <p>&copy; 2016 Farrukh Shahzad and Omar Shaikh.</p>
-      </footer>
-    </div> <!-- /container -->
+    </footer>
+</div> <!-- /container -->
 
-    <!-- This is a file picker modal -->
-    <div class="modal fade" id="filePickerModal" tabindex="-1" role="dialog" aria-labelledby="myFilePickerModal">
-      <div class="modal-dialog" role="document">
+<!-- This is a file picker modal -->
+<div class="modal fade" id="filePickerModal" tabindex="-1" role="dialog" aria-labelledby="myFilePickerModal">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Load JSON</h4>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-6">
-                <h4>From your PC</h4>
-                <input type='file' id='fileinput'>
-              </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Load JSON</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>From your PC</h4>
+                        <input type='file' id='fileinput'>
+                    </div>
 
-              <div class="col-md-6">
-                  <h4>From our servers</h4>
-                  <div>
+                    <div class="col-md-6">
+                        <h4>From our servers</h4>
 
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown">
-                      <span data-bind="label" id="data-file-label">Select One</span>&nbsp;<span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu server-selection" role="menu">
-                    </ul>
-                  </div>
+                        <div>
 
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle form-control"
+                                        data-toggle="dropdown">
+                                    <span data-bind="label" id="data-file-label">Select One</span>&nbsp;<span
+                                        class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu server-selection" role="menu">
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="loadFile()">Create Network</button>
-          </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="loadFile()">Create Network</button>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
-    <!-- This is a graph settings modal -->
-    <div class="modal fade" id="graphSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myFilePickerModal">
-      <div class="modal-dialog" role="document">
+<!-- This is a graph settings modal -->
+<div class="modal fade" id="graphSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myFilePickerModal">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Graph Settings</h4>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-2"></div>
-              <div class="col-md-8">              
-                <form class="graph-selection">
-                </form>
-              </div>
-              <div class="col-md-2"></div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Graph Settings</h4>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-danger" onclick="clearpane()" data-dismiss="modal">Clear Graph</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="updateNetworkSettings()">Save Settings</button>
-          </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <form class="graph-selection">
+                        </form>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+               <!-- <button type="button" class="btn btn-danger" onclick="clearpane()" data-dismiss="modal">Clear Graph
+                </button> -->
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="updateNetworkSettings()">
+                    Save Settings
+                </button>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
-    <!-- External Resources -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
-    <script src="resources/jsnetworkx.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="resources/ie10-viewport-bug-workaround.js"></script>
+<!-- External Resources -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
+<script src="resources/jsnetworkx.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="resources/ie10-viewport-bug-workaround.js"></script>
 
-    <script src="src/fileSaver.js" type="text/javascript"></script>
-    <script src="src/networkData.js"></script>
-    <script src="src/topology.js"></script>
-    <script src="src/filePicker.js"></script>
-    <script src="src/setPane.js"></script>
-    <script src="src/default.js" type="text/javascript"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="src/fileSaver.js" type="text/javascript"></script>
+<script src="src/networkData.js"></script>
+<script src="src/topology.js"></script>
+<script src="src/filePicker.js"></script>
+<script src="src/setPane.js"></script>
+<script src="src/default.js" type="text/javascript"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 
-  </body>
+</body>
 </html>
