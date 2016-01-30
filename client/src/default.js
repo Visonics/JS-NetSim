@@ -12,7 +12,9 @@ var graphData = {
     "graph": {
         "name": "A Sample Network (move nodes to make a ring)",
         "r": 250,
-        "drag": true
+        "drag": true,
+        "width": 500,
+        "height": 500
     },
     "nodes": [
         {
