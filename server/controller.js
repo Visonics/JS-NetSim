@@ -1,7 +1,5 @@
 var DATA_DIRECTORY = '/data/';
-
 var fs = require('fs');
-
 module.exports = {
   // body...
   getData: function(req, res) {

@@ -1,6 +1,7 @@
 var controller = require('./controller.js');
 var express = require('express');
 var app = express();
+var PORT = process.env.PORT || 3000;
 
 // Allow cors
 app.use(function(req, res, next) {
@@ -17,7 +18,7 @@ app.get('/', function(req, res){
   res.send('JS-Netsim.')
 })
 
-app.listen(process.env.PORT || 3000, function () {
-  console.log('App listening!');
+app.listen(PORT, function () {
+  console.log('App listening on port ' + PORT);
 });
 
