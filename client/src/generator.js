@@ -133,17 +133,17 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
 
 
   graph.nodes = [];
-  int idCount = 0;
-  for (int i = 0; i < cooridantes.length; i++) {
-    for (int j = 0; j < cooridantes[i].length; j++) {
+  var idCount = 0;
+  for (var i = 0; i < cooridantes.length; i++) {
+    for (var j = 0; j < cooridantes[i].length; j++) {
 
       var node = {
-        x: cooridantes[i][j][0];
-        y: cooridantes[i][j][1];
-        color: graphData.nodeSpecific.color;
+        x: cooridantes[i][j][0],
+        y: cooridantes[i][j][1],
+        color: graphData.nodeSpecific.color,
         id: idCount,
-        shape: graphData.nodeSpecific.shape;
-        name: idCount + ""; 
+        shape: graphData.nodeSpecific.shape,
+        name: idCount + ""
       }
 
       idCount++;
