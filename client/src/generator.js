@@ -82,9 +82,7 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
     for (var i = 0; i < h; i++) {
       var startingW = SET_INTERVAL_WIDTH;
       cooridantes.push([]);
-      debugger;
       for (var j = 0; j < w ; j++) {
-        debugger;
         var randomW = getRandom(randomFactor * -1, randomFactor);
         var randomH = getRandom(randomFactor * -1, randomFactor);
         cooridantes[i].push([startingW + randomW, startingH + randomH]);
@@ -128,7 +126,7 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
   graph.graph = {};
 
   for (var key in graphData.graphSpecific) {
-    graph.graph[key] = specificData[key];
+    graph.graph[key] = graphData.graphSpecific[key];
   }
 
 
@@ -146,12 +144,30 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
         name: idCount + ""
       }
 
+      graph.nodes.push(node);
+
       idCount++;
     }
   }
 
   return graph;
-
 }
+
+var newMap = generateTopology(50, 5, {
+
+  graphSpecific: {
+    r: 4,
+    width: 500,
+    height: 500
+  },
+
+  nodeSpecific: {
+    color: 'blue',
+    shape: 'circle'
+  }
+
+});
+
+console.log(newMap);
 
 
