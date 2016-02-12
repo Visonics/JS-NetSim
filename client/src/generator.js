@@ -1,6 +1,5 @@
 
-
-function getRandom(min, max) {
+var getRandom = function(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -125,6 +124,8 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
   var graph = {};
   graph.graph = {};
 
+  graph.links = [];
+
   for (var key in graphData.graphSpecific) {
     graph.graph[key] = graphData.graphSpecific[key];
   }
@@ -141,7 +142,8 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
         color: graphData.nodeSpecific.color,
         id: idCount,
         shape: graphData.nodeSpecific.shape,
-        name: idCount + ""
+        name: idCount + "",
+        size: graphData.nodeSpecific.size
       }
 
       graph.nodes.push(node);
@@ -152,22 +154,4 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
 
   return graph;
 }
-
-var newMap = generateTopology(50, 5, {
-
-  graphSpecific: {
-    r: 4,
-    width: 500,
-    height: 500
-  },
-
-  nodeSpecific: {
-    color: 'blue',
-    shape: 'circle'
-  }
-
-});
-
-console.log(newMap);
-
 

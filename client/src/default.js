@@ -74,4 +74,24 @@ var graphData = {
     ]
 }
 
-displayNetwork(graphData);
+var newMap = generateTopology(50, 5, {
+
+  graphSpecific: {
+    r: 4,
+    width: 700,
+    height: 500
+  },
+
+  nodeSpecific: {
+    color: 'blue',
+    shape: 'circle',
+    size: 10
+  }
+
+});
+
+console.log("GENERATED");
+console.log(newMap); 
+
+// displayNetwork(graphData);
+displayNetwork(newMap);
