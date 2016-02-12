@@ -74,12 +74,13 @@ var graphData = {
     ]
 }
 
-var newMap = generateTopology(50, 5, {
+var newMap = generateTopology(50, 20, {
 
   graphSpecific: {
-    r: 4,
+    r: 100,
     width: 700,
-    height: 500
+    height: 500,
+    drag: true
   },
 
   nodeSpecific: {

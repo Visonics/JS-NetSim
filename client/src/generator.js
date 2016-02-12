@@ -79,13 +79,18 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
     var cooridantes = [];
     var startingH = height - SET_INTERVAL_HEIGHT;
     for (var i = 0; i < h; i++) {
-      var startingW = SET_INTERVAL_WIDTH;
+      var startingW = 0;
       cooridantes.push([]);
       for (var j = 0; j < w ; j++) {
+
         var randomW = getRandom(randomFactor * -1, randomFactor);
         var randomH = getRandom(randomFactor * -1, randomFactor);
+
+        
         cooridantes[i].push([startingW + randomW, startingH + randomH]);
+
         startingW += SET_INTERVAL_WIDTH;
+
       }
 
       startingH -= SET_INTERVAL_HEIGHT;
