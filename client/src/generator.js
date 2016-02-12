@@ -1,3 +1,4 @@
+$('.generatedsettings').toggle();
 
 var getRandom = function(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -86,7 +87,7 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
         var randomW = getRandom(randomFactor * -1, randomFactor);
         var randomH = getRandom(randomFactor * -1, randomFactor);
 
-        
+
         cooridantes[i].push([startingW + randomW, startingH + randomH]);
 
         startingW += SET_INTERVAL_WIDTH;

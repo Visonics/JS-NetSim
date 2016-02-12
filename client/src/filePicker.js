@@ -7,6 +7,12 @@ var serverURL = "http://jsnetsim.herokuapp.com"
 var wipeOnNewLoad = false;
 
 var JSONLoaded = false;
+var generate = false;
+
+var toggleGeneration = function(){
+    generate = true;
+    $('.generatedsettings').toggle('slow');
+}
 
 $(document.body).on('click', '.dropdown-menu li', function (event) {
 
@@ -85,6 +91,13 @@ var loadFile = function () {
 
     $('#filePickerModal').modal('hide');
 
+
+    if (generate) {
+        // Load data from text
+        // Call generate with data (see default.js)
+        // Call displaynetwork with data returned from generate
+        return;
+    }
 
     var serverDataFile = $('#data-file-label').text();
     if (serverDataFile != "Select One") {
