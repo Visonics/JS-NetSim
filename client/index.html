@@ -32,21 +32,28 @@
     </div>
     <div class="jumbotron">
         <h1>Simulate Networks</h1>
-
         <p class="lead">JS-Netsim allows you to display complex networks by loading JSON from a server,
             or importing it from your PC.</p>
-
-        <p>
-            <span><a class="btn btn-lg btn-success" href="#" id="loadbutton" role="button" onclick="showModal()">Load
-                JSON</a></span>
-            <span><a class="btn btn-lg btn-success" href="#" id="setbutton" role="button"
-                     onclick="displayNetworkSettings()">Settings</a></span>
-            <span><a class="btn btn-lg btn-success" href="#" id="saveJson" role="button">Save JSON</a></span>
-        </p>
+        <form class="form-horizontal" role="form">
+                    <div class="form-group form-group-xs">
+                        <div class="col-md-3">
+                           <input id="loadbutton" type="button" class="btn btn-danger btn-xs" value="Load JSON" onclick="showModal()" />
+						</div>
+						<div class="col-md-3">
+							<input type="button" id="settings" class="btn btn-primary btn-xs" value="Settings" onclick="displayNetworkSettings()" />
+						</div>
+                        <div class="col-md-3">
+                            <a href="#" id="saveJson"><input type="button" class="btn btn-success btn-xs" value="Save JSON" /></a>
+						</div>
+                        <div class="col-md-3">
+                            <a href="#" id="saveSVG"><input type="button" class="btn btn-success btn-xs" value="Save SVG" /></a>
+						</div>
+                    </div>
+        </form>
     </div>
-    <div id="graphName" class="text-center">
+    <div id="graphTitle" class="text-center">
     </div>
-    <div class="networkview">
+    <div id="network" class="networkview">
     </div>
     <!--
     <div class="row marketing">
@@ -146,7 +153,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Graph Settings</h4>
+                <h4 class="modal-title" id="graphSettings">Graph Settings</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
