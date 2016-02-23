@@ -2,7 +2,7 @@ $('.generatedsettings').toggle();
 
 var getRandom = function(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
 var pixelScreen = function  (numPixels, randomFactor, width, height) {
 
@@ -18,7 +18,7 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
     }
 
     return true;
-  }
+  };
 
   var unPrimePixel = function(num){
 
@@ -59,7 +59,7 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
     }
 
     return paired;
-  }
+  };
 
   var smallestDistance = function (arr) {
     var lowest = Infinity;
@@ -72,15 +72,15 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
     }
 
     return lowestLocation;
-  }
+  };
 
   var coordinateGenerator = function (w, h, width, height) {
-    var SET_INTERVAL_HEIGHT = height/h;
-    var SET_INTERVAL_WIDTH = width/w;
+    var SET_INTERVAL_HEIGHT = 0.95*height/h;
+    var SET_INTERVAL_WIDTH = 0.95*width/w;
     var cooridantes = [];
     var startingH = height - SET_INTERVAL_HEIGHT;
     for (var i = 0; i < h; i++) {
-      var startingW = 0;
+      var startingW = randomFactor;
       cooridantes.push([]);
       for (var j = 0; j < w ; j++) {
 
@@ -99,7 +99,7 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
     }
 
     return cooridantes;
-  }
+  };
 
 
   if (isPrime(numPixels)) {
@@ -117,7 +117,7 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
   var h = smallestMultiple[0];
 
   return [coordinateGenerator(w, h, width, height), smallestMultiple, unPrimePixel];
-}
+};
 
 var generateTopology = function(numPixels, randomFactor, graphData) {
   var cooridantes = pixelScreen(

@@ -1,13 +1,13 @@
 .svgborder {
     border: 4px solid rgb(238,238,238);
-    padding: 20px; 
+    padding: 20px;
 }
 
 .link {
   stroke: #000;
-  stroke-width: 1.5px;
-  opacity: 0.3;
-  /*z-index: 0.5*/
+  stroke-width: 1px;
+  /*opacity: 0.3;
+  z-index: 0.5*/
 }
 
 

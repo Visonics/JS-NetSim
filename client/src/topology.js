@@ -9,7 +9,7 @@
 var color = d3.scale.category20();
 var ww = 0;
 
-var targetSvgId = "graph"
+var targetSvgId = "graph";
 
 var nodeElement = function (shape, classType, data, attrfn) {
     var newNode;
@@ -22,7 +22,7 @@ var nodeElement = function (shape, classType, data, attrfn) {
         .remove();
 
     return attrfn(newNode);
-}
+};
 
 var render = function (graph, options, settings) {
 
@@ -56,7 +56,7 @@ var render = function (graph, options, settings) {
     var drag = force.drag();
 
     if (settings.name) {
-        $('#graphName').text(settings.name);
+        $('#graphTitle').text(settings.name);
     }
 
     var nodes = [],
@@ -81,9 +81,10 @@ var render = function (graph, options, settings) {
                 d.fixed = true;
                 return d.size / 2
             })
+            .style("stroke", '#000')
             .style("fill", function (d) {
                 return d.color;
-            })
+            });
 
         if (settings.drag) {
             element.call(force.drag());
@@ -104,6 +105,7 @@ var render = function (graph, options, settings) {
             .attr("height", function (d) {
                 return d.size
             })
+            .style("stroke", '#333')
             .style("fill", function (d) {
                 d.fixed = true;
                 return d.color;
@@ -134,7 +136,9 @@ var render = function (graph, options, settings) {
 
         link.enter().append("line")
             .attr("class", "link")
-            .style("stroke-dasharray", ("5, 5"));
+            .style("stroke", '#000')
+            .style("stroke-dasharray", ("5, 5"))
+            .style("stroke-width", 1);
 
         link.exit().remove();
 

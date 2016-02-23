@@ -77,6 +77,7 @@ var graphData = {
 var newMap = generateTopology(50, 20, {
 
   graphSpecific: {
+    name: 'Random 50 Nodes',
     r: 100,
     width: 700,
     height: 500,
