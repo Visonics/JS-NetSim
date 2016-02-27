@@ -81,7 +81,7 @@ var DEFAULT_GEN = {
     height: 500,
     drag: true,
     color: 'blue',
-    shape: 'circle',
+    shape: 'square',
     size: 10,
     numPixels: 50,
     randomFactor: 20
@@ -106,9 +106,4 @@ var newMap = generateTopology(DEFAULT_GEN.numPixels, DEFAULT_GEN.randomFactor, {
 
 });
 
-
-console.log("GENERATED");
-console.log(newMap); 
-
-// displayNetwork(graphData);
 displayNetwork(newMap);
