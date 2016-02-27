@@ -97,13 +97,13 @@ var loadFile = function () {
         // Load data from text
         // Call generate with data (see default.js)
         // Call displaynetwork with data returned from generate
-        var numPixels = $('#nodenum').val() || DEFAULT_GEN.numPixels;
+        var numPixels = parseInt($('#nodenum').val() || DEFAULT_GEN.numPixels);
         var graphData = {
             graphSpecific: {
-                r: $("#rval").val() || DEFAULT_GEN.r,
-                name: $("#graphname").val() || DEFAULT_GEN.name,
-                width: $('#graphwidth').val() || DEFAULT_GEN.width,
-                height: $('#graphheight').val() || DEFAULT_GEN.height,
+                r: parseInt($("#rval").val() || DEFAULT_GEN.r),
+                name: parseInt($("#graphname").val() || DEFAULT_GEN.name),
+                width: parseInt($('#graphwidth').val() || DEFAULT_GEN.width),
+                height: parseInt($('#graphheight').val() || DEFAULT_GEN.height),
                 drag: DEFAULT_GEN.drag
             },
 
@@ -114,8 +114,7 @@ var loadFile = function () {
             }
         };
 
-        var randomFactor = $('#randomfactor').val() || DEFAULT_GEN.randomFactor;
-
+        var randomFactor = parseInt($('#randomfactor').val() || DEFAULT_GEN.randomFactor);
         var newMap = generateTopology(numPixels, randomFactor, graphData);
         displayNetwork(newMap);
 
