@@ -15,7 +15,7 @@ app.get('/data/', controller.getDataList);
 
 
 app.get('/', function(req, res){
-  res.send('JS-Netsim.')
+  res.send('JS-Netsim.');
 })
 
 app.listen(PORT, function () {

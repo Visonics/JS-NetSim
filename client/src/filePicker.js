@@ -96,6 +96,18 @@ var loadFile = function () {
         // Load data from text
         // Call generate with data (see default.js)
         // Call displaynetwork with data returned from generate
+        var numPixels;
+        var graphData = {
+            graphSpecific: {
+
+            },
+
+            nodeSpecific: {
+                
+            }
+        };
+
+        var randomFactor;
         return;
     }
 

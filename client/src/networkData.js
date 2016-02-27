@@ -6,7 +6,7 @@ var dist = function (x1, y1, x2, y2) {
     if (!x2) x2 = 0;
     if (!y2) y2 = 0;
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-}
+};
 
 var NetworkXGenerator = function (networkJSON) {
 
@@ -65,10 +65,10 @@ var NetworkXGenerator = function (networkJSON) {
             sourceNode: sourceNode
         });
 
-    })
+    });
     return g;
 
-}
+};
 
 // These network settings methods play with the modal. They are aspects of a view.
 // TODO: Maybe use backbone for MVC setup. Or React
@@ -89,10 +89,10 @@ var updateNetworkSettings = function () {
     }
     options =  {
         wipeOnNewLoad: false, width: generalNetworkData.graph.width,
-        height: generalNetworkData.graph.height, drag: generalNetworkData.graph['drag']
-    }
+        height: generalNetworkData.graph.height, drag: generalNetworkData.graph.drag
+    };
     updateLinksCallback(options);
-}
+};
 
 var displayNetworkSettings = function () {
     $('#graphSettingsModal').modal('show');
@@ -107,14 +107,14 @@ var displayNetworkSettings = function () {
             '<div class="input-group-addon">' + name + '</div>' +
             '<input type="' + type + '" class="form-control" id="' + name + '" ' + value + ' />' +
             '</div><br >';
-    }
+    };
 
     $('.graph-selection').empty();
     for (var key in generalNetworkData.graph) {
         $('.graph-selection').append(makeInputDiv(key, generalNetworkData.graph[key]));
     }
 
-}
+};
 
 var updateNetwork = function (graph, nodeData) {
 
