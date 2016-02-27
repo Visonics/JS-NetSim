@@ -81,7 +81,7 @@ var DEFAULT_GEN = {
     height: 500,
     drag: true,
     color: 'blue',
-    shape: 'square',
+    shape: 'circle',
     size: 10,
     numPixels: 50,
     randomFactor: 20
