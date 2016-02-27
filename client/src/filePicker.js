@@ -93,9 +93,31 @@ var loadFile = function () {
 
 
     if (generate) {
+        console.log("CALIING RAW GENERATOR");
         // Load data from text
         // Call generate with data (see default.js)
         // Call displaynetwork with data returned from generate
+        var numPixels = parseInt($('#nodenum').val() || DEFAULT_GEN.numPixels);
+        var graphData = {
+            graphSpecific: {
+                r: parseInt($("#rval").val() || DEFAULT_GEN.r),
+                name: parseInt($("#graphname").val() || DEFAULT_GEN.name),
+                width: parseInt($('#graphwidth').val() || DEFAULT_GEN.width),
+                height: parseInt($('#graphheight').val() || DEFAULT_GEN.height),
+                drag: DEFAULT_GEN.drag
+            },
+
+            nodeSpecific: {
+                color: $('#nodecolor').val() || DEFAULT_GEN.color,
+                shape: $('#nodeshape').val() || DEFAULT_GEN.shape,
+                size: $('nodesize').val() || DEFAULT_GEN.size
+            }
+        };
+
+        var randomFactor = parseInt($('#randomfactor').val() || DEFAULT_GEN.randomFactor);
+        var newMap = generateTopology(numPixels, randomFactor, graphData);
+        displayNetwork(newMap);
+
         return;
     }
 
