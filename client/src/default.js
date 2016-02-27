@@ -74,23 +74,38 @@ var graphData = {
     ]
 }
 
-var newMap = generateTopology(50, 20, {
+var DEFAULT_GEN = {
+    r: 100,
+    name: 'Random Graph',
+    width: 700,
+    height: 500,
+    drag: true,
+    color: 'blue',
+    shape: 'circle',
+    size: 10,
+    numPixels: 50,
+    randomFactor: 20
+};
+
+
+var newMap = generateTopology(DEFAULT_GEN.numPixels, DEFAULT_GEN.randomFactor, {
 
   graphSpecific: {
     name: 'Random 50 Nodes',
-    r: 100,
-    width: 700,
-    height: 500,
-    drag: true
+    r: DEFAULT_GEN.r,
+    width: DEFAULT_GEN.width,
+    height: DEFAULT_GEN.height,
+    drag: DEFAULT_GEN.drag
   },
 
   nodeSpecific: {
-    color: 'blue',
-    shape: 'circle',
-    size: 10
+    color: DEFAULT_GEN.color,
+    shape: DEFAULT_GEN.shape,
+    size: DEFAULT_GEN.size
   }
 
 });
+
 
 console.log("GENERATED");
 console.log(newMap); 

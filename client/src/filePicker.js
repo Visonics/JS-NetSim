@@ -96,14 +96,20 @@ var loadFile = function () {
         // Load data from text
         // Call generate with data (see default.js)
         // Call displaynetwork with data returned from generate
-        var numPixels;
+        var numPixels = $('#nodenum').val();
         var graphData = {
             graphSpecific: {
-
+                r: $("#rval").val() || DEFAULT_GEN.r,
+                name: $("#graphname").val() || DEFAULT_GEN.name,
+                width: $('#graphwidth').val() || DEFAULT_GEN.width,
+                height: $('#graphheight').val() || DEFAULT_GEN.height,
+                drag: DEFAULT_GEN.drag
             },
 
             nodeSpecific: {
-                
+                color: $('#nodecolor').val() || DEFAULT_GEN.color,
+                shape: $('#nodeshape').val() || DEFAULT_GEN.shape,
+                size: $('nodesize').val() || DEFAULT_GEN.size
             }
         };
 
