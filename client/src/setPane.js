@@ -30,8 +30,11 @@ function isNumber(evt) {
 }
 
 function showNode(node)
-{	
-	if (document.getElementById("show_node").checked)
+{
+
+	show_node = document.getElementById("show_node");
+
+	if (show_node && show_node.checked)
 		$('.nav-tabs a[href="#node_control"]').tab('show');
 	
 	document.getElementById("node_id").innerHTML = "" + node.id;
