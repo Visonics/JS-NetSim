@@ -1,34 +1,50 @@
-.svgborder {
-    border: 4px solid rgb(238,238,238);
-    padding: 20px;
-}
-
-.link {
-  stroke: #000;
-  stroke-width: 1px;
-  /*opacity: 0.3;
-  z-index: 0.5*/
-}
-
 
 /* Space out content a bit */
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.title {
+		color: White;
+		font-size: 300%;
+		font-family: 'Shadows Into Light', Arial;
+		text-shadow: 2px 2px 2px #aaa;
+		cursor: initial;
+}
+
+.subtitle {
+		color: White;
+		cursor: initial;
+}
+
+.left_button {
+	float: left;
+	margin: 10px
+}
+.right_button {
+	float: right;
+	margin: 10px
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,
 .footer {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 
 /* Custom page header */
 .header {
-  padding-bottom: 20px;
-  border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 5px;
+    margin-bottom: -5px;
+  	background-color: #D2E9FF;
+	border: 1px solid #5280FF;
+	text-align: center;
+	vertical-align: middle;
+	cursor: initial;
+	overflow: visible;
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
@@ -42,6 +58,13 @@ body {
   padding-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
+}
+
+.networkview {
+  height:75%;
+  border: 2px solid #5280FF;
+  padding: 15px;  
+  overflow: auto;
 }
 
 /* Customize container */

@@ -93,11 +93,8 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
         startingW += SET_INTERVAL_WIDTH;
 
       }
-
       startingH -= SET_INTERVAL_HEIGHT;
-
     }
-
     return cooridantes;
   };
 
@@ -133,11 +130,12 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
   graph.links = [];
 
   for (var key in graphData.graphSpecific) {
-    graph.graph[key] = graphData.graphSpecific[key];
+       graph.graph[key] = graphData.graphSpecific[key];
   }
 
-
+  shapes = ["square", "circle"];
   graph.nodes = [];
+
   var idCount = 0;
   for (var i = 0; i < cooridantes.length; i++) {
     for (var j = 0; j < cooridantes[i].length; j++) {
@@ -145,12 +143,12 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
       var node = {
         x: cooridantes[i][j][0],
         y: cooridantes[i][j][1],
-        color: graphData.nodeSpecific.color,
+        color: graphData.nodeSpecific.color || getColor(getRandom(0,DEFAULT_GEN.max_color)),
         id: idCount,
-        shape: graphData.nodeSpecific.shape,
+        shape: graphData.nodeSpecific.shape || shapes[getRandom(0,1)],
         name: idCount + "",
-        size: graphData.nodeSpecific.size
-      }
+        size: graphData.nodeSpecific.size || getRandom(DEFAULT_GEN.min_size,DEFAULT_GEN.max_size)
+      };
 
       graph.nodes.push(node);
 
@@ -159,5 +157,33 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
   }
 
   return graph;
-}
+};
 
+var generateFromForm = function () {
+
+  // Load data from text
+  // Call generate with data (see default.js)
+  // Call displayNetwork with data returned from generate
+  var numPixels = parseInt($('#nodenum').val() || DEFAULT_GEN.numPixels);
+  var color_code = parseInt($('#nodecolor').val());
+  var randomFactor = parseInt($('#randomfactor').val() || DEFAULT_GEN.randomFactor);
+  var graphData = {
+    graphSpecific: {
+      r: parseInt($("#rval").val() || DEFAULT_GEN.r),
+      name: $("#graphname").val() || DEFAULT_GEN.name,
+      width: parseInt($('#graphwidth').val() || DEFAULT_GEN.width),
+      height: parseInt($('#graphheight').val() || DEFAULT_GEN.height),
+      drag: DEFAULT_GEN.drag
+    },
+
+    nodeSpecific: {
+      color: getColor(color_code),
+      shape: $('#nodeshape').val(),
+      size: $('nodesize').val() || DEFAULT_GEN.size
+    }
+  };
+
+  var newMap = generateTopology(numPixels, randomFactor, graphData);
+  displayNetwork(newMap);
+
+};

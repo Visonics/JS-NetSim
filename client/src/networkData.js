@@ -22,8 +22,8 @@ var NetworkXGenerator = function (networkJSON) {
 
     // Load nodes
     networkJSON.nodes.forEach(function (node) {
-        var name = node.name.toString();
-        g.addNode(name, node);
+        var id = node.id.toString();
+        g.addNode(id, node);
     });
 
     // See if r exists, and save it.
@@ -123,17 +123,19 @@ var updateNetwork = function (graph, nodeData) {
     changes.removedEdges = [];
 
     // Replace nodes with new x and y positions
-    graph.addNode(nodeData.name, nodeData);
-
+    graph.addNode(nodeData.id.toString(), nodeData);
+    
     // Begin by checking if r exists anywhere.
     if (generalNetworkData.graph.r) {
 
         // Get nodes from jsnetwork data structure
         var nodes = graph.nodes(true);
+		id = nodeData.id.toString();
+		console.log("*****", id, nodes.length, nodeData.x, nodeData.y); 
         for (var i = 0; i < nodes.length; i++) {
-
+			
             // Skip over the current node.
-            if (nodes[i][0] === nodeData.name) {
+            if (nodes[i][0] === id) {
                 continue;
             }
 
@@ -144,14 +146,14 @@ var updateNetwork = function (graph, nodeData) {
 
                 // We check both combinations against the hash table.
                 // Protects against bi-links.
-                if (graph.hasEdge(nodes[i][0], nodeData.name)) {
+                if (graph.hasEdge(nodes[i][0], id)) {
 
                     // Remove bi-links, again. That's why there are two remove edges.
                     changes.removedEdges.push([nodeData.index, nodes[i][1].index]);
                     changes.removedEdges.push([nodes[i][1].index, nodeData.index]);
 
                     // Remvoe link from data structure
-                    graph.removeEdge(nodeData.name, nodes[i][0]);
+                    graph.removeEdge(id, nodes[i][0]);
 
                     // Set them to removed
                 }
@@ -159,13 +161,13 @@ var updateNetwork = function (graph, nodeData) {
             } else {
                 // Only run if both possible links are not there.
 
-                if (!graph.hasEdge(nodes[i][0], nodeData.name)) {
+                if (!graph.hasEdge(nodes[i][0], id)) {
 
                     // Add the edge to changes.
                     changes.addedEdges.push([nodeData.index, nodes[i][1].index]);
 
                     // Update the structure with the distance as the weight
-                    graph.addEdge(nodeData.name, nodes[i][0], {
+                    graph.addEdge(id, nodes[i][0], {
                         weight: newDist
                     });
 

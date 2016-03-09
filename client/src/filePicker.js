@@ -12,7 +12,7 @@ var generate = false;
 var toggleGeneration = function(){
     generate = true;
     $('.generatedsettings').toggle('slow');
-}
+};
 
 $(document.body).on('click', '.dropdown-menu li', function (event) {
 
@@ -36,15 +36,15 @@ var clearpane = function () {
     $("#graphName").text("");
     svg = false;
     force = false;
-}
+};
 
 var makeRadioDiv = function (name) {
     return '<div class="radio"><label><input type="radio" name="optradio" value="' + name + '">' + name + '</label></div>';
-}
+};
 
 var makeDropdownDiv = function (name) {
     return '<li><a href="#">' + name + '</a></li>'
-}
+};
 
 var changeLoadButton = function () {
     if (JSONLoaded) {
@@ -53,7 +53,7 @@ var changeLoadButton = function () {
         $('#loadbutton').text('Load JSON');
 
     }
-}
+};
 
 var showModal = function () {
    // if (!JSONLoaded) {
@@ -70,13 +70,9 @@ var showModal = function () {
                     $('.server-selection').append(makeDropdownDiv(element));
                 })
             }
-        })
+        });
 
-    //} else {
-   //     displayNetworkSettings();
-  //      $('#graphSettingsModal').modal('show');
-  //  }
-}
+};
 
 var displayNetwork = function (graphData) {
     if (!wipeOnNewLoad) wipeOnNewLoad = true;
@@ -85,40 +81,14 @@ var displayNetwork = function (graphData) {
         wipeOnNewLoad: wipeOnNewLoad, width: graphData.graph.width,
         height: graphData.graph.height
     }, graphData.graph);
-}
+};
 
 var loadFile = function () {
 
     $('#filePickerModal').modal('hide');
 
-
     if (generate) {
-        console.log("CALIING RAW GENERATOR");
-        // Load data from text
-        // Call generate with data (see default.js)
-        // Call displaynetwork with data returned from generate
-        var numPixels = parseInt($('#nodenum').val() || DEFAULT_GEN.numPixels);
-        var graphData = {
-            graphSpecific: {
-                r: parseInt($("#rval").val() || DEFAULT_GEN.r),
-                name: parseInt($("#graphname").val() || DEFAULT_GEN.name),
-                width: parseInt($('#graphwidth').val() || DEFAULT_GEN.width),
-                height: parseInt($('#graphheight').val() || DEFAULT_GEN.height),
-                drag: DEFAULT_GEN.drag
-            },
-
-            nodeSpecific: {
-                color: $('#nodecolor').val() || DEFAULT_GEN.color,
-                shape: $('#nodeshape').val() || DEFAULT_GEN.shape,
-                size: $('nodesize').val() || DEFAULT_GEN.size
-            }
-        };
-
-        var randomFactor = parseInt($('#randomfactor').val() || DEFAULT_GEN.randomFactor);
-        var newMap = generateTopology(numPixels, randomFactor, graphData);
-        displayNetwork(newMap);
-
-        return;
+        generateFromForm();
     }
 
     var serverDataFile = $('#data-file-label').text();
@@ -129,7 +99,7 @@ var loadFile = function () {
                 var parsed = JSON.parse(data);
                 displayNetwork(parsed);
             }
-        })
+        });
 
         JSONLoaded = true;
         //changeLoadButton();
@@ -166,7 +136,6 @@ var loadFile = function () {
         fr.onload = receivedText;
         fr.readAsText(file);
         JSONLoaded = true;
-        //changeLoadButton();
     }
 
     function receivedText(e) {
@@ -174,7 +143,7 @@ var loadFile = function () {
         var graphData = JSON.parse(lines);
         displayNetwork(graphData);
     }
-}
+};
 
 
 
