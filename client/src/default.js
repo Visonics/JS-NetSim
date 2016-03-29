@@ -75,23 +75,28 @@ var graphData = {
 }
 
 var DEFAULT_GEN = {
-    r: 100,
+    r: 120,
+    min_r: 5,
+    max_r: 200,
     name: 'Random Graph',
     width: 700,
     height: 500,
     drag: true,
-    color: 'blue',
-    shape: 'circle',
+    color: '#0000FF',  // blue
+    max_color: 2,
+    shape: 'square',
     size: 10,
-    numPixels: 50,
-    randomFactor: 20
+    min_size: 5,
+    max_size: 20,
+    numPixels: 40,
+    randomFactor: 5
 };
 
 
 var newMap = generateTopology(DEFAULT_GEN.numPixels, DEFAULT_GEN.randomFactor, {
 
   graphSpecific: {
-    name: 'Random 50 Nodes',
+    name: 'Random 40 Nodes',
     r: DEFAULT_GEN.r,
     width: DEFAULT_GEN.width,
     height: DEFAULT_GEN.height,
@@ -99,9 +104,9 @@ var newMap = generateTopology(DEFAULT_GEN.numPixels, DEFAULT_GEN.randomFactor, {
   },
 
   nodeSpecific: {
-    color: DEFAULT_GEN.color,
-    shape: DEFAULT_GEN.shape,
-    size: DEFAULT_GEN.size
+    color: null,
+    shape: null,
+    size:  null
   }
 
 });
