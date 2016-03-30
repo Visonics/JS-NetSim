@@ -131,7 +131,7 @@ var updateNetwork = function (graph, nodeData) {
         // Get nodes from jsnetwork data structure
         var nodes = graph.nodes(true);
 		id = nodeData.id.toString();
-		console.log("*****", id, nodes.length, nodeData.x, nodeData.y); 
+		// console.log("*****", id, nodes.length, nodeData.x, nodeData.y); 
         for (var i = 0; i < nodes.length; i++) {
 			
             // Skip over the current node.
