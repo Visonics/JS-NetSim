@@ -2,7 +2,7 @@ var width = 700;
 var height = 500;
 
 var setPane = function(target, options){
-  console.log(options);
+  // console.log(options);
 
   if (options.wipeOnNewLoad) {
     target.selectAll("*").remove();

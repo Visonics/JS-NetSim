@@ -2,7 +2,7 @@
 var svg = false;
 var force = false;
 
-var serverURL = "http://jsnetsim.herokuapp.com"
+var serverURL = "http://jsnetsim.herokuapp.com";
 
 var wipeOnNewLoad = false;
 
