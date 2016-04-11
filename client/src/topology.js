@@ -231,8 +231,8 @@ var render = function (graph, options, settings) {
     });
 
 	updateCallback = function (d) {
-		console.log("x=", d.x, 'y=',d.y); 
-		console.log(d.color, d.size, d.shape);	
+		// console.log("x=", d.x, 'y=',d.y); 
+		// console.log(d.color, d.size, d.shape);	
         d3.selectAll('.node').select("title").text(function (d) {
                     return d.id + "-" + d.name + "\nx= " + d.x + ", y= " + d.y;
                 }
