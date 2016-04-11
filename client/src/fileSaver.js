@@ -4,7 +4,7 @@ function getFilename(dname) {
 
 $(function () {
     $("#saveJson").on("click", function () {
-        console.log(generalNetworkData);
+        // console.log(generalNetworkData);
         fname = getFilename(generalNetworkData.graph.name + ".json");
         if (fname) {
             $(this).attr("href", "data:text/json;charset=utf8, " + encodeURIComponent(JSON.stringify(generalNetworkData, null, 4))).attr("download", fname);
@@ -21,7 +21,7 @@ $(function () {
     });
 
     $("#saveSVG").on("click", function () {
-        console.log("svg:", svg[0][0]);
+        // console.log("svg:", svg[0][0]);
         fname = getFilename(generalNetworkData.graph.name + ".svg");
         if (fname) {
 
