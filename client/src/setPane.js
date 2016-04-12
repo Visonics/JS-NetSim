@@ -135,7 +135,7 @@ function getColor(id) {
 	} else
 	   coloring = coloringElem.value;
 
-    console.log(id, coloring);
+    // console.log(id, coloring);
     if (coloring == -1) {
         color = null;
     }
@@ -165,7 +165,7 @@ function getContrastColor(color)
 	var ib = Math.floor((255-b)*brightness);
 
 	cc = rgb(ir,ig,ib);
-	console.log(color, cc, cct)
+	// console.log(color, cc, cct);
     return cc;
 }
 
