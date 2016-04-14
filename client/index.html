@@ -111,11 +111,11 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
                         </div>
                         <div class="col-md-4">
                             <label for="graphwidth">Width</label>
-                            <input style="width: 80px;" type="number" class="form-control" id="graphwidth" value="700" min="100" max="1000" onkeypress="return isNumber(event)">
+                            <input style="width: 80px;" type="number" class="form-control" id="graphwidth" value="700" min="100" max="1000" onkeypress="return isNumber(event)" onchange="return updateBlockade(false)">
                          </div>
                          <div class="col-md-4">
                             <label for="graphheight">Height</label>
-                            <input style="width: 80px;" type="number" class="form-control" id="graphheight"  value="500" min="100" max="1000" onkeypress="return isNumber(event)">
+                            <input style="width: 80px;" type="number" class="form-control" id="graphheight"  value="500" min="100" max="1000" onkeypress="return isNumber(event)" onchange="updateBlockade(true)">
                         </div>
                     </div>
                     <div class="form-group form-group-sm">

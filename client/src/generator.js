@@ -159,6 +159,10 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
   return graph;
 };
 
+var updateBlockade = function(isHeight) {
+
+};
+
 var generateFromForm = function () {
 
   // Load data from text
