@@ -216,7 +216,7 @@ var render = function (graph, options, settings) {
             })
             start();
         }
-        showInfo(true);
+        showInfo(true, graph);
     };
 
 	//d3.selectAll('.node').on("click", function(d) {
@@ -287,5 +287,4 @@ var render = function (graph, options, settings) {
 
 	start();
     updateCompleteNetwork(graph);
-    //showInfo(true);
 };

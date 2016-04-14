@@ -73,7 +73,7 @@ function setNode(action)
 }
 
 
-function showInfo(display)
+function showInfo(display, graph)
 {
 	info_div = document.getElementById("infodiv");
 
@@ -82,19 +82,29 @@ function showInfo(display)
 
 	info_div.innerHTML = 'No Nodes!';
 
+	nn = graph.numberOfNodes();
+	sum = 0;
+	degs = graph.degree().values();
+	for (v of degs) {
+          sum += v;
+    }
+	avg_deg = sum/nn;
+	//console.log(jsnx.info(graph), sum);
 	len = generalNetworkData.nodes.length;
 	str = "<h3>Network Info</h3>";
 	str += "<p>Name:  " + generalNetworkData.graph.name  + "</p>";
-    str += "<p>No. of Nodes: " + len + "</p>";
+    str += "<p>No. of Nodes: " + nn + ", ";
+	str += "No. of Edges: " + graph.numberOfEdges() + "</p>";
+	str += "<p>Avg. Degree: " + avg_deg.toFixed(2) + ", ";
+	str += "Node Density: " + jsnx.density(graph).toFixed(4) + "</p>";
     str += "<p>Comm. range:  " + generalNetworkData.graph.r  + "</p>";
     str += "<p>Width:  " + generalNetworkData.graph.width  + ",  ";
     str += "Height:  " + generalNetworkData.graph.height  + "</p>";
-	nm = len;
-    if (nm > 0) {
+    if (nn > 0) {
         str += '<table class="table table-condensed table-bordered"><tr>';
         str += '<th>Id/Name</th><th style="text-align: center;">Shape (size)</th><th style="text-align: center;">Location/Links</th></tr>';
     }
-	for (i = 0; i < nm; i++) {
+	for (i = 0; i < nn; i++) {
         color = generalNetworkData.nodes[i].color;
 		if (color=='blue') color = "0000ff";
 		if (color=='red') color = "ff0000";
