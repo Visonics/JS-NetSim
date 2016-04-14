@@ -57,7 +57,6 @@ var NetworkXGenerator = function (networkJSON) {
             }
         });
 
-
         g.addEdge(sourceName, destinationName, {
             source: sourceIndex,
             target: destinationIndex,
