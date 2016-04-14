@@ -159,7 +159,46 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
   return graph;
 };
 
-var updateBlockade = function(isHeight) {
+// Blockade dataset
+dataset = [];
+
+function updateBlockade(isHeight) {
+
+  d3.select('.obstacle-map').selectAll('*').remove();
+  dataset = [];
+
+  if (isHeight) {
+    height = parseInt($('#graphheight').val());
+  } else {
+    width = parseInt($('#graphwidth').val());
+  }
+
+  var obstacle_map = d3.select('.obstacle-map')
+      .append("svg")
+      .attr("width", width/2)
+      .attr("height", height/2)
+      .attr("class", "obstacle-svg")
+      .on("click", function(){
+          var coords = d3.mouse(this);
+          var newData = {
+              x: Math.round( coords[0]),  // Takes the pixel number to convert to number
+              y: Math.round( coords[1])
+          };
+
+          var circleAttrs = {
+            cx: function(d) { return coords[0]; },
+            cy: function(d) { return coords[1]; },
+            r: 5
+          };
+
+          dataset.push(newData);
+
+          obstacle_map.selectAll("circle")  // For new circle, go through the update process
+              .data(dataset)
+              .enter()
+              .append("circle")
+              .attr(circleAttrs); // Get attributes from circleAttrs var
+      });
 
 };
 
