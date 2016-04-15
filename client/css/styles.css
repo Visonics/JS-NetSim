@@ -13,6 +13,10 @@ body {
 		cursor: initial;
 }
 
+.obstacle-svg {
+  border-style: solid;
+}
+
 .subtitle {
 		color: White;
 		cursor: initial;

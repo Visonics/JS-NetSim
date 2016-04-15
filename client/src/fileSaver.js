@@ -2,7 +2,11 @@ function getFilename(dname) {
     return prompt("Please enter filename", dname);
 }
 
-$(function () {
+
+$(document).ready(function () {
+
+    updateBlockade();
+
     $("#saveJson").on("click", function () {
         // console.log(generalNetworkData);
         fname = getFilename(generalNetworkData.graph.name + ".json");

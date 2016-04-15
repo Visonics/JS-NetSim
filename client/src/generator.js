@@ -4,7 +4,7 @@ var getRandom = function(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var pixelScreen = function  (numPixels, randomFactor, width, height) {
+var pixelScreen = function  (numPixels, randomFactor, width, height, holes) {
 
   if (numPixels === 0) {
     return;
@@ -74,7 +74,7 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
     return lowestLocation;
   };
 
-  var coordinateGenerator = function (w, h, width, height) {
+  var coordinateGenerator = function (w, h, width, height, holeData) {
     var SET_INTERVAL_HEIGHT = 0.95*height/h;
     var SET_INTERVAL_WIDTH = 0.95*width/w;
     var cooridantes = [];
@@ -84,11 +84,27 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
       cooridantes.push([]);
       for (var j = 0; j < w ; j++) {
 
-        var randomW = getRandom(randomFactor * -1, randomFactor);
-        var randomH = getRandom(randomFactor * -1, randomFactor);
+        var randomW = getRandom(randomFactor * -1, randomFactor) + startingW;
+        var randomH = getRandom(randomFactor * -1, randomFactor) + startingH;
 
+        var skip = false;
 
-        cooridantes[i].push([startingW + randomW, startingH + randomH]);
+        if (holeData) {
+          for (var k = 0; k < holeData.obstacle.length; k++) {
+
+            var holeCoords = holeData.obstacle[k];
+            var distance = dist(randomW, randomH, holeCoords.x * 2, holeCoords.y * 2);
+            if (holeData.r > distance) {
+
+              skip = true;
+              break;
+            }
+          }
+        }
+
+        if (!skip) {
+          cooridantes[i].push([randomW, randomH]);
+        }
 
         startingW += SET_INTERVAL_WIDTH;
 
@@ -113,7 +129,7 @@ var pixelScreen = function  (numPixels, randomFactor, width, height) {
   var w = smallestMultiple[1];
   var h = smallestMultiple[0];
 
-  return [coordinateGenerator(w, h, width, height), smallestMultiple, unPrimePixel];
+  return [coordinateGenerator(w, h, width, height, holes), smallestMultiple, unPrimePixel];
 };
 
 var generateTopology = function(numPixels, randomFactor, graphData) {
@@ -121,7 +137,8 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
     numPixels, 
     randomFactor, 
     graphData.graphSpecific.width, 
-    graphData.graphSpecific.height
+    graphData.graphSpecific.height,
+    graphData.graphSpecific.holes
   )[0];
 
   var graph = {};
@@ -159,6 +176,57 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
   return graph;
 };
 
+// Blockade dataset
+var dataset = 
+  {
+    r: 120,
+    obstacle: [],
+  };
+
+function updateBlockade(isHeight) {
+
+  d3.select('.obstacle-map').selectAll('*').remove();
+  dataset = 
+  {
+    r: 120,
+    obstacle: [],
+  };
+
+  if (isHeight) {
+    height = parseInt($('#graphheight').val());
+  } else {
+    width = parseInt($('#graphwidth').val());
+  }
+
+  var obstacle_map = d3.select('.obstacle-map')
+      .append("svg")
+      .attr("width", width/2) // Scale it down
+      .attr("height", height/2)
+      .attr("class", "obstacle-svg")
+      .on("click", function(){
+          var coords = d3.mouse(this);
+          var newData = {
+              x: Math.round( coords[0]),  // Takes the pixel number to convert to number
+              y: Math.round( coords[1])
+          };
+
+          var circleAttrs = {
+            cx: function(d) { return coords[0]; },
+            cy: function(d) { return coords[1]; },
+            r: 5
+          };
+
+          dataset.obstacle.push(newData);
+
+          obstacle_map.selectAll("circle")  // For new circle, go through the update process
+              .data(dataset.obstacle)
+              .enter()
+              .append("circle")
+              .attr(circleAttrs); // Get attributes from circleAttrs var
+      });
+
+}
+
 var generateFromForm = function () {
 
   // Load data from text
@@ -167,13 +235,18 @@ var generateFromForm = function () {
   var numPixels = parseInt($('#nodenum').val() || DEFAULT_GEN.numPixels);
   var color_code = parseInt($('#nodecolor').val());
   var randomFactor = parseInt($('#randomfactor').val() || DEFAULT_GEN.randomFactor);
+  var holeRadius = parseInt($('#holeradius').val());
+  debugger;
+  dataset.r = holeRadius || dataset.r;
+
   var graphData = {
     graphSpecific: {
       r: parseInt($("#rval").val() || DEFAULT_GEN.r),
       name: $("#graphname").val() || DEFAULT_GEN.name,
       width: parseInt($('#graphwidth').val() || DEFAULT_GEN.width),
       height: parseInt($('#graphheight').val() || DEFAULT_GEN.height),
-      drag: DEFAULT_GEN.drag
+      drag: DEFAULT_GEN.drag,
+      holes: dataset
     },
 
     nodeSpecific: {
@@ -187,3 +260,4 @@ var generateFromForm = function () {
   displayNetwork(newMap);
 
 };
+
