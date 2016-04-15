@@ -2,9 +2,6 @@ function getFilename(dname) {
     return prompt("Please enter filename", dname);
 }
 
-var dataset = [
-    // {x: , y: }
-];
 
 $(document).ready(function () {
 
