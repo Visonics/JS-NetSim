@@ -236,7 +236,7 @@ var generateFromForm = function () {
   var color_code = parseInt($('#nodecolor').val());
   var randomFactor = parseInt($('#randomfactor').val() || DEFAULT_GEN.randomFactor);
   var holeRadius = parseInt($('#holeradius').val());
-  debugger;
+
   dataset.r = holeRadius || dataset.r;
 
   var graphData = {
@@ -259,5 +259,6 @@ var generateFromForm = function () {
   var newMap = generateTopology(numPixels, randomFactor, graphData);
   displayNetwork(newMap);
 
+  // updateBlockade(); // Resets the obstacle interface on a graph generation.
 };
 
