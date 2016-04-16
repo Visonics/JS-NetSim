@@ -110,6 +110,7 @@ var displayNetworkSettings = function () {
 
     $('.graph-selection').empty();
     for (var key in generalNetworkData.graph) {
+        if (key=='holes') continue;
         $('.graph-selection').append(makeInputDiv(key, generalNetworkData.graph[key]));
     }
 

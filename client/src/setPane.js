@@ -1,5 +1,6 @@
 var width = 700;
 var height = 500;
+var selected_id = -1;
 
 var setPane = function(target, options){
   // console.log(options);
@@ -36,7 +37,8 @@ function showNode(node)
 
 	if (show_node && show_node.checked)
 		$('.nav-tabs a[href="#node_control"]').tab('show');
-	
+
+	selected_id = node.id;
 	document.getElementById("node_id").innerHTML = "" + node.id;
 	document.getElementById("node_name").value = node.name;
 	document.getElementById("node_x").innerHTML = "" + Math.round(node.x);
@@ -63,7 +65,7 @@ function setNode(action)
 	//node.y = document.getElementById("node_y").value;
 	if (action==1) { //Add
 		newId = generalNetworkData.nodes.length;
-		if (node.name==''+node.id) node.name = ''+newId
+		if (node.name==''+node.id) node.name = ''+newId;
 		node.id = newId;
 		node.index = newId;
 		node.weight = 0;
@@ -89,7 +91,7 @@ function showInfo(display, graph)
           sum += v;
     }
 	avg_deg = sum/nn;
-	//console.log(jsnx.info(graph), sum);
+	//console.log(selected_id);
 	len = generalNetworkData.nodes.length;
 	str = "<h3>Network Info</h3>";
 	str += "<p>Name:  " + generalNetworkData.graph.name  + "</p>";
@@ -105,6 +107,8 @@ function showInfo(display, graph)
         str += '<th>Id/Name</th><th style="text-align: center;">Shape (size)</th><th style="text-align: center;">Location/Links</th></tr>';
     }
 	for (i = 0; i < nn; i++) {
+		bg_color = '';
+		if (i==selected_id) bg_color = 'style="background-color: grey"';
         color = generalNetworkData.nodes[i].color;
 		if (color=='blue') color = "0000ff";
 		if (color=='red') color = "ff0000";
@@ -113,7 +117,7 @@ function showInfo(display, graph)
 		//console.log("*****", color, text_color);
         colorCtr = '<td style="text-align: center; vertical-align: middle; padding: 3px; border-radius:8px; color: ' +
             text_color +'; background-color: #' + color +'">' + generalNetworkData.nodes[i].shape + ' (' + generalNetworkData.nodes[i].size +  ')</td>';
-        str += "<tr><td>" + generalNetworkData.nodes[i].id + '-' + generalNetworkData.nodes[i].name + "</td>" + colorCtr;
+        str += "<tr " + bg_color + "><td>" + generalNetworkData.nodes[i].id + '-' + generalNetworkData.nodes[i].name + "</td>" + colorCtr;
         str += "<td align='center'>" + Math.round(generalNetworkData.nodes[i].x) +", " + Math.round(generalNetworkData.nodes[i].y) + "  (" +
 				generalNetworkData.nodes[i].weight + ")</td></tr>";
     }

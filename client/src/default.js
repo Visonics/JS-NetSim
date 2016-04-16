@@ -89,26 +89,27 @@ var DEFAULT_GEN = {
     min_size: 5,
     max_size: 20,
     numPixels: 40,
-    randomFactor: 5
+    max_nodes: 500,
+    randomFactor: 10
 };
 
 
-var newMap = generateTopology(DEFAULT_GEN.numPixels, DEFAULT_GEN.randomFactor, {
-
-  graphSpecific: {
-    name: 'Random 40 Nodes',
-    r: DEFAULT_GEN.r,
-    width: DEFAULT_GEN.width,
-    height: DEFAULT_GEN.height,
-    drag: DEFAULT_GEN.drag
-  },
-
-  nodeSpecific: {
-    color: null,
-    shape: null,
-    size:  null
-  }
-
+var newMap = generateTopology(
+    null,
+    DEFAULT_GEN.randomFactor,
+    {
+      graphSpecific: {
+        name: 'Random Nodes',
+        r: DEFAULT_GEN.r,
+        width: DEFAULT_GEN.width,
+        height: DEFAULT_GEN.height,
+        drag: DEFAULT_GEN.drag
+      },
+      nodeSpecific: {
+        color: null, //Use random
+        shape: null,
+        size:  null
+      }
 });
 
 displayNetwork(newMap);

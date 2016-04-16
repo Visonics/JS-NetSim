@@ -58,11 +58,13 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
         </div>
     </div>
 </div>
-<h3 id="graphTitle" style="margin-left: 20px;">  </h3>
-<div class="row" id='papp' style="margin-left: 10px;width: 100%;">
+<h2 id="graphTitle" style="margin-left: 30px;">  </h2>
+<div class="row" id='papp' style="margin-left: 10px;width: 100%;height:100%">
 
-    <div id="network" class="col-xs-7 networkview">   </div>
-    <div class="col-xs-5" style="height:80%;overflow: auto;">
+    <div class="col-sm-7" style="height:98%">
+        <div id="network" class="networkview">   </div>
+    </div>
+    <div class="col-sm-5" style="height:98%; overflow: auto">
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#setting">Network</a></li>
             <li><a data-toggle="tab" href="#gen_control">Generate</a></li>
@@ -125,11 +127,11 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
                         </div>
                         <div class="col-xs-4">
                             <label for="nodenum">Number of nodes</label>
-                            <input style="width: 80px;" type="number" class="form-control" id="nodenum" value="20" min="3" max="500" onkeypress="return isNumber(event)">
+                            <input style="width: 80px;" type="number" class="form-control" id="nodenum" value="50" min="3" max="500" onkeypress="return isNumber(event)">
                         </div>
                         <div class="col-xs-4">
                             <label for="randomfactor">Random Factor</label>
-                            <input style="width: 80px;" type="number" class="form-control" id="randomfactor" value="5" min="0" max="20" onkeypress="return isNumber(event)">
+                            <input style="width: 80px;" type="number" class="form-control" id="randomfactor" value="10" min="0" max="20" onkeypress="return isNumber(event)">
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
@@ -147,7 +149,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
                                 <option value=6>Brown</option>
                                 <option value=7>Cyan</option>
                                 <option value=8>LightSalmon</option>
-                                <option value='-1'>Random</option>
+                                <option value='-1' selected>Random</option>
                             </select>
                         </div>
                         <div class="col-md-4">
@@ -161,7 +163,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
                             <select class="form-control input-sm" id="nodeshape">
                                 <option value='square'>Square</option>
                                 <option value='circle'>Circle</option>
-                                <option value=''>Random</option>
+                                <option value='' selected>Random</option>
                             </select>
                         </div>
                     </div>
@@ -177,7 +179,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
                     </div>
                     <div class="form-group">
                         <div class="col-xs-4">
-                            <label for="nodeshape">Obstacle: </label>
+                            <label for="nodeshape">Obstacle Locations: (click below)</label>
                             <div class="col-md-12 obstacle-map">
                             </div>
                         </div>
@@ -333,7 +335,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="loadFile()">Create Network</button>
+                <button type="button" class="btn btn-primary" onclick="loadFile()">Load Network</button>
             </div>
         </div>
     </div>

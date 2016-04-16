@@ -81,7 +81,7 @@ var render = function (graph, options, settings) {
     var drag = force.drag();
 
     if (settings.name) {
-        $('#graphTitle').text(settings.name);
+        $('#graphTitle').text(settings.name + " (" + graph.numberOfNodes() + " nodes)");
         svg.append("svg:title").text(settings.name);
     }
 	svg.append("g").attr("id", "links");

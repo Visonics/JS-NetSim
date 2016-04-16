@@ -132,7 +132,8 @@ var pixelScreen = function  (numPixels, randomFactor, width, height, holes) {
   return [coordinateGenerator(w, h, width, height, holes), smallestMultiple, unPrimePixel];
 };
 
-var generateTopology = function(numPixels, randomFactor, graphData) {
+var generateTopology = function(numNodes, randomFactor, graphData) {
+  numPixels = numNodes || getRandom(20,100);
   var cooridantes = pixelScreen(
     numPixels, 
     randomFactor, 
@@ -180,7 +181,7 @@ var generateTopology = function(numPixels, randomFactor, graphData) {
 var dataset = 
   {
     r: 120,
-    obstacle: [],
+    obstacle: []
   };
 
 function updateBlockade(isHeight) {
@@ -189,7 +190,7 @@ function updateBlockade(isHeight) {
   dataset = 
   {
     r: 120,
-    obstacle: [],
+    obstacle: []
   };
 
   if (isHeight) {
