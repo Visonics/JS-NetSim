@@ -32,7 +32,6 @@ function isNumber(evt) {
 
 function showNode(node)
 {
-
 	show_node = document.getElementById("show_node");
 
 	if (show_node && show_node.checked)
