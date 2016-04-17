@@ -214,7 +214,7 @@ function updateBlockade(isHeight) {
           var circleAttrs = {
             cx: function(d) { return coords[0]; },
             cy: function(d) { return coords[1]; },
-            r: dataset.r/2
+            r: parseInt($('#holeradius').val())/2
           };
 
           dataset.obstacle.push(newData);
