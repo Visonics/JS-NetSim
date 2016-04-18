@@ -79,7 +79,23 @@ var render = function (graph, options, settings) {
     }
 
     var drag = force.drag();
-
+    
+    holeData = settings.holes;
+    //console.log(holeData);
+    if (holeData) {
+        for (var k = 0; k < holeData.obstacle.length; k++) {
+            var holeCoords = holeData.obstacle[k];
+            var rectAttrs = {
+                x: holeCoords.x * 2,
+                y: holeCoords.y * 2,
+                height: holeCoords.height * 2,
+                width: holeCoords.width * 2
+            };
+            svg.append("rect")
+                .attr("class", "obstacle-svg")
+                .attr(rectAttrs);            
+        }
+    }
     if (settings.name) {
         $('#graphTitle').text(settings.name + " (" + graph.numberOfNodes() + " nodes)");
         svg.append("svg:title").text(settings.name);

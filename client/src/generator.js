@@ -93,9 +93,9 @@ var pixelScreen = function  (numPixels, randomFactor, width, height, holes) {
           for (var k = 0; k < holeData.obstacle.length; k++) {
 
             var holeCoords = holeData.obstacle[k];
-            var distance = dist(randomW, randomH, holeCoords.x * 2, holeCoords.y * 2);
-            if (holeData.r > distance) {
-
+            //var distance = dist(randomW, randomH, holeCoords.x * 2, holeCoords.y * 2);
+            if (randomW > holeCoords.x * 2 && randomW < holeCoords.x * 2 + holeCoords.width * 2 && 
+                randomH > holeCoords.y * 2 && randomH < holeCoords.y * 2 + holeCoords.height * 2) {
               skip = true;
               break;
             }
@@ -184,7 +184,7 @@ var dataset =
     obstacle: []
   };
 
-function updateBlockade(isHeight) {
+function updateBlockadeCircle(isHeight) {
 
   d3.select('.obstacle-map').selectAll('*').remove();
   dataset = 
@@ -224,6 +224,48 @@ function updateBlockade(isHeight) {
               .enter()
               .append("circle")
               .attr(circleAttrs); // Get attributes from circleAttrs var
+      });
+
+}
+
+function updateBlockade(isHeight) {
+
+  d3.select('.obstacle-map').selectAll('*').remove();
+  w =  parseInt($('#holeWidth').val());
+  h =  parseInt($('#holeHeight').val());    
+  dataset = 
+  {
+    width: w,
+    height: h,
+    obstacle: []
+  };
+
+  //if (isHeight) {
+    height = parseInt($('#graphheight').val());
+  //} else {
+    width = parseInt($('#graphwidth').val());
+  //}
+
+  var obstacle_map = d3.select('.obstacle-map')
+      .append("svg")
+      .attr("width", width/2) // Scale it down
+      .attr("height", height/2)
+      .attr("class", "obstacle-svg")
+      .on("click", function(){
+          var coords = d3.mouse(this);
+          var newData = {
+              x: Math.round( coords[0]),  // Takes the pixel number to convert to number
+              y: Math.round( coords[1]),
+              width: w,
+              height: h              
+          };
+          //console.log(newData, w, h);
+          dataset.obstacle.push(newData);
+          obstacle_map.selectAll("rect")  // For new rect, go through the update process
+              .data(dataset.obstacle)
+              .enter()
+              .append("rect")
+              .attr(newData); // Get attributes from rectAttrs var
       });
 
 }
