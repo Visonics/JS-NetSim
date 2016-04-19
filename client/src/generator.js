@@ -91,11 +91,9 @@ var pixelScreen = function  (numPixels, randomFactor, width, height, holes) {
 
         if (holeData) {
           for (var k = 0; k < holeData.obstacle.length; k++) {
-
             var holeCoords = holeData.obstacle[k];
-            var distance = dist(randomW, randomH, holeCoords.x * 2, holeCoords.y * 2);
-            if (holeData.r > distance) {
-
+            if (randomW > holeCoords.x * 2 && randomW < holeCoords.x * 2 + holeCoords.width * 2 && 
+                randomH > holeCoords.y * 2 && randomH < holeCoords.y * 2 + holeCoords.height * 2) {
               skip = true;
               break;
             }
@@ -177,53 +175,41 @@ var generateTopology = function(numNodes, randomFactor, graphData) {
   return graph;
 };
 
-// Blockade dataset
-var dataset = 
-  {
-    r: 120,
-    obstacle: []
-  };
+function updateBlockade(remove) {
 
-function updateBlockade(isHeight) {
-
-  d3.select('.obstacle-map').selectAll('*').remove();
+  if (remove)
+    d3.select('.obstacle-map').selectAll('*').remove();
+       
   dataset = 
   {
-    r: 120,
     obstacle: []
   };
 
-  if (isHeight) {
-    height = parseInt($('#graphheight').val());
-  } else {
-    width = parseInt($('#graphwidth').val());
-  }
+  height = parseInt($('#graphheight').val());
+  width = parseInt($('#graphwidth').val());
 
   var obstacle_map = d3.select('.obstacle-map')
       .append("svg")
       .attr("width", width/2) // Scale it down
       .attr("height", height/2)
       .attr("class", "obstacle-svg")
-      .on("click", function(){
+      .on("click", function() {
+          w =  parseInt($('#holeWidth').val());
+          h =  parseInt($('#holeHeight').val());
           var coords = d3.mouse(this);
           var newData = {
-              x: Math.round( coords[0]),  // Takes the pixel number to convert to number
-              y: Math.round( coords[1])
+              x: Math.round( coords[0]) - w/2,  // Takes the pixel number to convert to number
+              y: Math.round( coords[1]) - h/2,
+              width: w,
+              height: h              
           };
-
-          var circleAttrs = {
-            cx: function(d) { return coords[0]; },
-            cy: function(d) { return coords[1]; },
-            r: parseInt($('#holeradius').val())/2
-          };
-
+          //console.log(newData, w, h);
           dataset.obstacle.push(newData);
-
-          obstacle_map.selectAll("circle")  // For new circle, go through the update process
+          obstacle_map.selectAll("rect")  // For new rect, go through the update process
               .data(dataset.obstacle)
               .enter()
-              .append("circle")
-              .attr(circleAttrs); // Get attributes from circleAttrs var
+              .append("rect")
+              .attr(newData); // Get attributes from rectAttrs var
       });
 
 }

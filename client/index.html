@@ -107,29 +107,29 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
                 <form class="form-horizontal" role="form">
                     <div class="form-group form-group-sm">
                         <div class="col-xs-4">
-                            <label for="graphname">Name</label>
+                            <label for="graphname">Name:</label>
                             <input type="text" class="form-control" id="graphname" value="New Network">
                         </div>
                         <div class="col-md-4">
-                            <label for="graphwidth">Width</label>
+                            <label for="graphwidth">Width:</label>
                             <input style="width: 80px;" type="number" class="form-control" id="graphwidth" value="700" min="100" max="1000" onkeypress="return isNumber(event)" onchange="return updateBlockade(false)">
                          </div>
                          <div class="col-md-4">
-                            <label for="graphheight">Height</label>
+                            <label for="graphheight">Height:</label>
                             <input style="width: 80px;" type="number" class="form-control" id="graphheight"  value="500" min="100" max="1000" onkeypress="return isNumber(event)" onchange="updateBlockade(true)">
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
                         <div class="col-xs-4">
-                            <label for="rval">Comm. Range, R</label>
+                            <label for="rval">Comm. Range, R:</label>
                             <input style="width: 80px;" type="number" class="form-control" id="rval" value="120" min="5" max="200" onkeypress="return isNumber(event)">
                         </div>
                         <div class="col-xs-4">
-                            <label for="nodenum">Number of nodes</label>
+                            <label for="nodenum">Number of nodes:</label>
                             <input style="width: 80px;" type="number" class="form-control" id="nodenum" value="50" min="3" max="500" onkeypress="return isNumber(event)">
                         </div>
                         <div class="col-xs-4">
-                            <label for="randomfactor">Random Factor</label>
+                            <label for="randomfactor">Random Factor:</label>
                             <input style="width: 80px;" type="number" class="form-control" id="randomfactor" value="10" min="0" max="20" onkeypress="return isNumber(event)">
                         </div>
                     </div>
@@ -166,28 +166,31 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-xs-4">
-                            <label for="holeradius">Obstacle. Range, R</label>
-                            <input style="width: 80px;" type="number" class="form-control" id="holeradius" value="120" min="5" max="200" onkeypress="return isNumber(event)">
-                        </div>
-                        <div class="col-xs-4">
-                            <label for="holeradius">Clear obstacles</label>
-                            <input id="loadbutton" type="button" class="btn btn-danger btn-md" value="Clear" onclick="updateBlockade()" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-4">
-                            <label for="nodeshape">Obstacle Locations: (click below)</label>
-                            <div class="col-md-12 obstacle-map">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group form-group-sm">
+                    <div class="form-group text-center">
                         <div class="col-md-12">
                             <a href="#" id="generateShow"><input type="button" class="btn btn-success btn-lg" value="Generate" onclick="generateFromForm()"/></a>
 						</div>
-                     </div>
+                     </div>                    
+                    <h3>Obstacle Rectangle</h3>
+                    <div class="form-group">
+                        <div class="col-xs-3">                            
+                            <label for="holeWidth">Width:</label>
+                            <input style="width: 80px;" type="number" class="form-control" id="holeWidth" value="100" min="5" max="1000" onkeypress="return isNumber(event)">
+                        </div>
+                        <div class="col-xs-3">
+                            <label for="holeHeight">Height:</label>
+                            <input style="width: 80px;" type="number" class="form-control" id="holeHeight" value="100" min="5" max="1000" onkeypress="return isNumber(event)">
+                        </div>                        
+                    </div>
+                    <div class="form-group text-center">
+                        <div class="col-xs-8">
+                            <label>Obstacle Locations (click below)</label>
+                            <div class="col-md-12 obstacle-map">             </div>
+                        </div>
+                        <div class="col-xs-4">                           
+                            <input type="button" class="btn btn-danger btn-md" value="Clear Obstacle" onclick="updateBlockade(true)" />
+                        </div>                        
+                    </div>
                 </form>
             </div>
 
