@@ -101,6 +101,18 @@ function showInfo(display, graph)
     str += "<p>Comm. range:  " + generalNetworkData.graph.r  + "</p>";
     str += "<p>Width:  " + generalNetworkData.graph.width  + ",  ";
     str += "Height:  " + generalNetworkData.graph.height  + "</p>";
+    holeData = generalNetworkData.graph.holes;
+    //console.log(holeData);
+    if (holeData) {	
+		str += "<p>Obstacle Name:  " + holeData.name;
+		for (var k = 0; k < holeData.obstacle.length; k++) {
+			holeCoords = holeData.obstacle[k];
+			str += "<br>&nbsp;&nbsp;" + (k + 1) + ". Top Left: (" + holeCoords.x + ", " +  holeCoords.y + "), " +  
+				"&nbsp;Width: " + holeCoords.width + ", Height:" + holeCoords.height;
+		}
+		str += "</p>";	
+	}	
+	
     if (nn > 0) {
         str += '<table class="table table-condensed table-bordered"><tr>';
         str += '<th>Id/Name</th><th style="text-align: center;">Shape (size)</th><th style="text-align: center;">Location/Links</th></tr>';
@@ -127,7 +139,7 @@ function showInfo(display, graph)
 }
 
 function getColorCode(color_code) {
-    Colors = ['FF0000', '008000', '0000FF', 'FFFF00', '000000', '808080', 'A52A2A', '00FFFF', 'FFA07A'];
+    Colors = ['FF0000', '008000', '0000FF', 'FFFF00', '000000', '808080', 'A52A2A', '00FFFF', 'FFA07A', 'FFFFFF'];
 	var i=0;
 	if (color_code=='blue') color = "0000ff";
 	if (color_code=='red') color = "ff0000";	
@@ -139,12 +151,12 @@ function getColorCode(color_code) {
 }
 	
 function getColor(id) {
-    Colors = ['FF0000', '008000', '0000FF', 'FFFF00', '000000', '808080', 'A52A2A', '00FFFF', 'FFA07A'];
+    Colors = ['FF0000', '008000', '0000FF', 'FFFF00', '000000', '808080', 'A52A2A', '00FFFF', 'FFA07A', 'FFFFFF'];
 	coloringElem = document.getElementById("nodecolor");
 
 	if (id>=0) {
 		coloring = id;
-		if (id < 0 || id > 8) return null;
+		if (id < 0 || id > 9) return null;
 	} else
 	   coloring = coloringElem.value;
 
@@ -191,4 +203,14 @@ function getContrastYIQ(hexcolor)
     var b = parseInt(hexcolor.substr(4,2),16);
     var yiq = ((r*299)+(g*587)+(b*114))/1000;
     return (yiq >= 128) ? 'black' : 'white';
+}
+
+function label_control()
+{
+	updateCallback(generalNetworkData.nodes[0]);
+}
+
+function axes_control()
+{
+	updateCallback(generalNetworkData.nodes[0]);
 }

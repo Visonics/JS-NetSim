@@ -11,46 +11,77 @@ var color = d3.scale.category20();
 var targetSvgId = "graph";
 
 var selected=null;
-function click(d){
+function click(d) {
    if(!selected){
      selected = this;
-     d3.select(selected).style("stroke-width", '3');
+     d3.select(selected).style("stroke-width", '2').style("stroke", '#000');
   }
   else {
-     d3.select(selected).style("stroke-width", '1');
+     d3.select(selected).style("stroke-width", '0');
      selected = this;
-     d3.select(selected).style("stroke-width", '3');
+     d3.select(selected).style("stroke-width", '2').style("stroke", '#000');
   }
   showNode(d);
 }
 
-var nodeElement = function (shape, classType, data, attrfn) {
+var nodeElement = function (data, options) {
     var newNode;
-    newNode = svg.select("#nodes").selectAll(".node" + classType)
-        .data(data);
+    var radiusBorder = 6;    
+    newNode = svg.select("#nodes").selectAll(".node").data(data);
 
-    newNode.enter().append(shape).attr("class", "node").on("click", click)
-	    .style("stroke", '#000')
-        .style("fill", function (d) {
-			d.fixed = true;
-            return d.color;
-    });
-    newNode.on('mouseover', function(d) {
-        d3.select(this).style({"stroke": "#fff"})
+    newNode.enter().append("g").attr("class", "node");
+    
+    var node_object = newNode.append("path")
+      .attr("d", function(d) { d.fixed = true; return Nodeshapes[d.shape]["d"];})
+          
+    node_object.on("click", click);   
+    node_object.on('mouseover', function(d) {
+        d3.select(this) 
+        .style("fill-opacity", 0.5)
     })
     .on('mouseout', function(d){
-        d3.select(this).style({"stroke": '#000'})
+        d3.select(this) 
+        .style("fill-opacity", 1.0)
+        .style("fill", function (d) {		
+            return d.color;})   
     });
-
+       
 	newNode.append("title")
         .text(function (d) {
-            return d.id + "-" + d.name + "\nx = " + d.x + ", y = " + d.y;
+            return d.id + "-" + d.size + "\nx = " + d.x + ", y = " + d.y;
         });
-
+              
+    newNode.append("text")
+      .attr("dy", ".35em")
+      .text(function(d) { return "" });
+                        
     newNode.exit().remove();
 
-    return attrfn(newNode);
+    return newNode;
 };
+
+var drawAxes = function(width, height) {
+    
+  var x = d3.scale.linear()
+    .range([0, width]);
+
+  var y = d3.scale.linear()
+    .range([height, 0]);  
+    
+  //x.domain(d3.extent(data, function(d) { return d.x; })).nice();
+  //y.domain(d3.extent(data, function(d) { return d.y; })).nice();    
+  
+  // Add the x-axis.
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.svg.axis().scale(x).orient("top"));
+
+  // Add the y-axis.
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(d3.svg.axis().scale(y).orient("left"));    
+}
 
 var render = function (graph, options, settings) {
 
@@ -77,23 +108,28 @@ var render = function (graph, options, settings) {
             .alpha(0)
             .size([options.width, options.height]);
     }
-
+    
+    //drawAxes(options.width, options.height);
+    
     var drag = force.drag();
     
     holeData = settings.holes;
-    //console.log(holeData);
     if (holeData) {
         for (var k = 0; k < holeData.obstacle.length; k++) {
             var holeCoords = holeData.obstacle[k];
             var rectAttrs = {
-                x: holeCoords.x * 2,
-                y: holeCoords.y * 2,
-                height: holeCoords.height * 2,
-                width: holeCoords.width * 2
+                x: holeCoords.x,
+                y: holeCoords.y,
+                width: holeCoords.width,
+                height: holeCoords.height                
             };
-            svg.append("rect")
+            var hole = svg.append("rect")
                 .attr("class", "obstacle-svg")
-                .attr(rectAttrs);            
+                .attr(rectAttrs);
+                
+            var fillcolor = hole.style("fill");
+            var fillopacity = hole.style("fill-opacity");
+            hole.style('fill', fillcolor).style('fill-opacity', fillopacity);          
         }
     }
     if (settings.name) {
@@ -114,41 +150,11 @@ var render = function (graph, options, settings) {
         nodes.push(item[1]);
     });
 
-	var circleNode = nodeElement("circle", ".circleNode", nodes, function (element) {
-		element = element
-			.filter(function (d) {
-				return (d.shape === "circle")
-			})
-			.attr("r", function (d) {                
-				return d.size / 2
-			});
-
-		if (settings.drag) {
-			element.call(force.drag());
-		}
-
-		return element;
-	});
-
-	var squareNode = nodeElement("rect", ".sqrNode", nodes, function (element) {
-		element = element
-			.filter(function (d) {
-				return (d.shape === "square")
-			})
-			.attr("width", function (d) {
-				return d.size
-			})
-			.attr("height", function (d) {
-				return d.size
-			});
-
-		if (settings.drag) {
-			element.call(force.drag());
-		}
-
-		return element;
-	});	
-
+	var nd = nodeElement(nodes, options);
+    if (settings.drag) {
+			d3.selectAll('.node').call(drag);
+	};
+    
     var start = function () {		
         var link = svg.select("#links").selectAll(".link")
             .data(links);
@@ -179,24 +185,7 @@ var render = function (graph, options, settings) {
 
                 .attr("y2", function (d) {
                     return d.target.y = Math.max(radiusBorder, Math.min(options.height - radiusBorder, d.target.y));
-                });
-
-            circleNode.attr("cx", function (d) {
-                    return d.x = Math.max(radiusBorder, Math.min(options.width - radiusBorder, d.x));
-                })
-                .attr("cy", function (d) {
-                    return d.y = Math.max(radiusBorder, Math.min(options.height - radiusBorder, d.y));
-                });
-
-            squareNode.attr("x", function (d) {
-				    dx = Math.max(radiusBorder, Math.min(options.width - radiusBorder, d.x)); 
-					return dx - d.size/2; 
-                })
-                .attr("y", function (d) {
-                    dy = Math.max(radiusBorder, Math.min(options.height - radiusBorder, d.y));
-					return dy - d.size/2; 
-                });	
-
+                });                              	
         });
 
         force
@@ -235,11 +224,6 @@ var render = function (graph, options, settings) {
         showInfo(true, graph);
     };
 
-	//d3.selectAll('.node').on("click", function(d) {
-     //   click();
-	//	showNode(d);
-	//});
-
     // Instead of running on tick, we only run on drags.
     // Way more efficient.
     drag.on('drag', function (d) {
@@ -247,33 +231,50 @@ var render = function (graph, options, settings) {
     });
 
 	updateCallback = function (d) {
-		// console.log("x=", d.x, 'y=',d.y); 
-		// console.log(d.color, d.size, d.shape);	
+        option = {"labels": document.getElementById('labels').checked, 
+                  "axes": document.getElementById('axes').checked};
+		//console.log("x=", d.x, 'y=',d.y); 
+		//console.log(d.color, d.size, d.shape);	
         d3.selectAll('.node').select("title").text(function (d) {
-                    return d.id + "-" + d.name + "\nx= " + d.x + ", y= " + d.y;
-                }
-        );		
-        d3.selectAll('.node').style('fill', function (d) {
-                    return d.color;
+                    return d.id + "-" + d.size + "\nx= " + d.x + ", y= " + d.y;
                 }
         );
-		if (d.shape=='circle') 	{	
-			circleNode.attr('r', function (d) {
-                    return d.size/2;
+               
+        if (option)	
+            d3.selectAll('.node').select("text").text(function (d) {
+                    if (option.labels) return d.name; else return "";
                 }
-			);
-		}	
-		else {	
-			squareNode.attr('width', function (d) {
-						return d.size;
-					}
-			);
-			squareNode.attr("height", function (d) {
-						return d.size;
-					}
-			);			
-		}
+            ).attr("x", function (d) { return d.x;})
+             .attr("y", function (d) { return d.y;})
+             .attr("dx", function (d) {
+                    if (option.axes) return -d.size/4; else return d.size;
+                }                
+            ).style('font-size', '12px')
+            .style('fill', function (d) {
+                    text_color = d.color;
+                    if (option.axes || text_color=='#FFFFFF') {
+                        color = text_color.replace('#', '');
+		                text_color = getContrastYIQ(color);
+                    }    
+                    return text_color;
+            });        	
+            
+
+        d3.selectAll('.node').select("path").style('fill', function (d) {
+                    return d.color;
+               })
+               .style('fill-rule', "nonzero")
+               .attr("d", function(d) { return Nodeshapes[d.shape]["d"]; });
+                                                    
+        d3.selectAll('.node').select("path").attr("transform", function(d) { 
+            dx = Math.max(radiusBorder, Math.min(options.width - radiusBorder, d.x)); 
+            dy = Math.max(radiusBorder, Math.min(options.height - radiusBorder, d.y));
+            return "translate(" + (dx)  + "," + (dy) + ") scale(" + 
+             (d.size / (Nodeshapes[d.shape]["zoom"] || 1)) +  ")"; 
+        });
+        
 		var visualChanges = updateNetwork(graph, d);
+        
         updateVisuals(visualChanges);
         updateNetworkObject(nodes, links);
 		
@@ -286,7 +287,7 @@ var render = function (graph, options, settings) {
         options = new_options;
         setPane(svg, options);
         if (options.drag)
-            d3.selectAll('.node').call(force.drag);
+            d3.selectAll('.node').select("path").call(force.drag);
         else
             d3.selectAll('.node').on('mousedown.drag', null);
 
