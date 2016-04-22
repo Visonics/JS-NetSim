@@ -92,8 +92,8 @@ var pixelScreen = function  (numPixels, randomFactor, width, height, holes) {
         if (holeData) {
           for (var k = 0; k < holeData.obstacle.length; k++) {
             var holeCoords = holeData.obstacle[k];
-            if (randomW > holeCoords.x * 2 && randomW < holeCoords.x * 2 + holeCoords.width * 2 && 
-                randomH > holeCoords.y * 2 && randomH < holeCoords.y * 2 + holeCoords.height * 2) {
+            if (randomW > holeCoords.x  && randomW < holeCoords.x + holeCoords.width && 
+                randomH > holeCoords.y  && randomH < holeCoords.y + holeCoords.height) {
               skip = true;
               break;
             }
@@ -131,7 +131,7 @@ var pixelScreen = function  (numPixels, randomFactor, width, height, holes) {
 };
 
 var generateTopology = function(numNodes, randomFactor, graphData) {
-  numPixels = numNodes || getRandom(20,100);
+  numPixels = numNodes || getRandom(2,20) * 5;
   var cooridantes = pixelScreen(
     numPixels, 
     randomFactor, 
@@ -149,7 +149,7 @@ var generateTopology = function(numNodes, randomFactor, graphData) {
        graph.graph[key] = graphData.graphSpecific[key];
   }
 
-  shapes = ["square", "circle"];
+  shapes = Object.keys(Nodeshapes);
   graph.nodes = [];
 
   var idCount = 0;
@@ -161,7 +161,7 @@ var generateTopology = function(numNodes, randomFactor, graphData) {
         y: cooridantes[i][j][1],
         color: graphData.nodeSpecific.color || getColor(getRandom(0,DEFAULT_GEN.max_color)),
         id: idCount,
-        shape: graphData.nodeSpecific.shape || shapes[getRandom(0,1)],
+        shape: graphData.nodeSpecific.shape || shapes[getRandom(0,shapes.length - 1)],
         name: idCount + "",
         size: graphData.nodeSpecific.size || getRandom(DEFAULT_GEN.min_size,DEFAULT_GEN.max_size)
       };
@@ -171,47 +171,74 @@ var generateTopology = function(numNodes, randomFactor, graphData) {
       idCount++;
     }
   }
-
+  
   return graph;
 };
 
-function updateBlockade(remove) {
+function updateBlockade(remove, shape) {
 
   if (remove)
     d3.select('.obstacle-map').selectAll('*').remove();
        
   dataset = 
   {
+    name: 'Custom',
     obstacle: []
   };
 
   height = parseInt($('#graphheight').val());
   width = parseInt($('#graphwidth').val());
-
+  
+  drawObstacle = function(coords) {
+          w =  parseInt($('#holeWidth').val());
+          h =  parseInt($('#holeHeight').val());
+          if (!coords)
+            coords = d3.mouse(this);
+          else  {
+            w = coords[2];
+            h = coords[3];
+          }
+          var newData = {
+                x: Math.round(coords[0]*2) - w/2,
+                y: Math.round(coords[1]*2) - h/2,                
+                width: w,
+                height: h
+          };  
+          var rectAttrs = {
+              x: newData.x/2,
+              y: newData.y/2,
+              width: w/2,
+              height: h/2              
+          };
+        
+          //console.log(newData);
+          dataset.obstacle.push(newData);
+          obstacle_map.selectAll("*")  // For new rect, go through the update process
+              .data(dataset.obstacle)
+              .enter()
+              .append("rect")
+              .attr(rectAttrs); // Get attributes from rectAttrs var
+  }
+  
   var obstacle_map = d3.select('.obstacle-map')
       .append("svg")
       .attr("width", width/2) // Scale it down
       .attr("height", height/2)
       .attr("class", "obstacle-svg")
-      .on("click", function() {
-          w =  parseInt($('#holeWidth').val());
-          h =  parseInt($('#holeHeight').val());
-          var coords = d3.mouse(this);
-          var newData = {
-              x: Math.round( coords[0]) - w/2,  // Takes the pixel number to convert to number
-              y: Math.round( coords[1]) - h/2,
-              width: w,
-              height: h              
-          };
-          //console.log(newData, w, h);
-          dataset.obstacle.push(newData);
-          obstacle_map.selectAll("rect")  // For new rect, go through the update process
-              .data(dataset.obstacle)
-              .enter()
-              .append("rect")
-              .attr(newData); // Get attributes from rectAttrs var
-      });
-
+      .on("click", drawObstacle);
+      
+  if (shape) { 
+     shape = $('#netshape').val();
+     dataset.name = shape;
+     if (shape=='O') 
+        drawObstacle([width/4, height/4, 300, 250]);
+     if (shape=='C') 
+        drawObstacle([width/3, height/4, 400, 200]);
+     if (shape=='S') {
+        drawObstacle([width/3, height/7, 400, 125]);
+        drawObstacle([100, height/3, 400, 125]);
+     }   
+  }    
 }
 
 var generateFromForm = function () {
@@ -239,13 +266,12 @@ var generateFromForm = function () {
     nodeSpecific: {
       color: getColor(color_code),
       shape: $('#nodeshape').val(),
-      size: $('nodesize').val() || DEFAULT_GEN.size
+      size: $('#nodesize').val() || DEFAULT_GEN.size
     }
   };
-
-  var newMap = generateTopology(numPixels, randomFactor, graphData);
+  
+  var newMap = generateTopology(numPixels, randomFactor, graphData); 
   displayNetwork(newMap);
-
-  // updateBlockade(); // Resets the obstacle interface on a graph generation.
+  updateCallback(newMap.nodes[0]); 
 };
 

@@ -28,6 +28,7 @@ var NetworkXGenerator = function (networkJSON) {
 
     // See if r exists, and save it.
     if (networkJSON.graph.r) {
+        console.log("/*/*", networkJSON.graph.r);
         generalNetworkData.graph.r = networkJSON.graph.r;
     }
 
@@ -131,7 +132,7 @@ var updateNetwork = function (graph, nodeData) {
         // Get nodes from jsnetwork data structure
         var nodes = graph.nodes(true);
 		id = nodeData.id.toString();
-		// console.log("*****", id, nodes.length, nodeData.x, nodeData.y); 
+		//console.log("*****", id, nodes.length, nodeData.x, nodeData.y); 
         for (var i = 0; i < nodes.length; i++) {
 			
             // Skip over the current node.
@@ -154,13 +155,9 @@ var updateNetwork = function (graph, nodeData) {
 
                     // Remvoe link from data structure
                     graph.removeEdge(id, nodes[i][0]);
-
-                    // Set them to removed
                 }
-
             } else {
                 // Only run if both possible links are not there.
-
                 if (!graph.hasEdge(nodes[i][0], id)) {
 
                     // Add the edge to changes.
@@ -186,6 +183,7 @@ var updateNetwork = function (graph, nodeData) {
 //Update Network object for JSON
 var updateNetworkObject = function (nodes, links) {
     newlinks = [];
+    //console.log("*****", links.length); 
     for (var i = 0; i < links.length; i++) {
         newlinks.push({source: links[i].source.index, target: links[i].target.index});
     }

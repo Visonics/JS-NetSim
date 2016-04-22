@@ -16,6 +16,12 @@ h3 {
   cursor: initial;
 }
 
+h4 {
+  font-family: georgia;
+  color: #727272;
+  font-size: x-large
+}
+
 .title {
 		color: White;
 		font-size: 300%;
