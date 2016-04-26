@@ -132,6 +132,7 @@ var pixelScreen = function  (numPixels, randomFactor, width, height, holes) {
 
 var generateTopology = function(numNodes, randomFactor, graphData) {
   numPixels = numNodes || getRandom(2,20) * 5;
+  offset = 10;
   var cooridantes = pixelScreen(
     numPixels, 
     randomFactor, 
@@ -157,8 +158,8 @@ var generateTopology = function(numNodes, randomFactor, graphData) {
     for (var j = 0; j < cooridantes[i].length; j++) {
 
       var node = {
-        x: cooridantes[i][j][0],
-        y: cooridantes[i][j][1],
+        x: cooridantes[i][j][0] + offset,
+        y: cooridantes[i][j][1] + offset,
         color: graphData.nodeSpecific.color || getColor(getRandom(0,DEFAULT_GEN.max_color)),
         id: idCount,
         shape: graphData.nodeSpecific.shape || shapes[getRandom(0,shapes.length - 1)],
@@ -182,23 +183,24 @@ function updateBlockade(remove, shape) {
        
   dataset = 
   {
-    name: 'Custom',
     obstacle: []
   };
 
   height = parseInt($('#graphheight').val());
   width = parseInt($('#graphwidth').val());
   
-  drawObstacle = function(coords) {
+  drawObstacle = function(coords, name) {
           w =  parseInt($('#holeWidth').val());
           h =  parseInt($('#holeHeight').val());
-          if (!coords)
+          if (!coords) {
             coords = d3.mouse(this);
-          else  {
+            name = "Custom " + (dataset.obstacle.length + 1);
+          } else  {
             w = coords[2];
             h = coords[3];
           }
           var newData = {
+                name: name,
                 x: Math.round(coords[0]*2) - w/2,
                 y: Math.round(coords[1]*2) - h/2,                
                 width: w,
@@ -229,14 +231,14 @@ function updateBlockade(remove, shape) {
       
   if (shape) { 
      shape = $('#netshape').val();
-     dataset.name = shape;
+     //dataset.name = shape;
      if (shape=='O') 
-        drawObstacle([width/4, height/4, 300, 250]);
+        drawObstacle([width/4, height/4, 300, 250], shape);
      if (shape=='C') 
-        drawObstacle([width/3, height/4, 400, 200]);
+        drawObstacle([width/3, height/4, 400, 200], shape);
      if (shape=='S') {
-        drawObstacle([width/3, height/7, 400, 125]);
-        drawObstacle([100, height/3, 400, 125]);
+        drawObstacle([width/3, height/7, 400, 125], shape+"-top");
+        drawObstacle([100, height/3, 400, 125], shape+"-bottom");
      }   
   }    
 }

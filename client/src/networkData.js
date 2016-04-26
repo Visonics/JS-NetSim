@@ -84,13 +84,16 @@ var updateNetworkSettings = function () {
     }
 
     if (generalNetworkData.graph.name) {
-        $("#graphName").text(generalNetworkData.graph.name + ", r = " +
-            generalNetworkData.graph.r + ", Drag = " + generalNetworkData.graph.drag);
+        $('#graphTitle').text(generalNetworkData.graph.name + " (" + 
+            generalNetworkData.nodes.length + " nodes)");
+        //$("#graphName").text(generalNetworkData.graph.name + ", r = " +
+       //    generalNetworkData.graph.r + ", Drag = " + generalNetworkData.graph.drag);
     }
     options =  {
         wipeOnNewLoad: false, width: generalNetworkData.graph.width,
         height: generalNetworkData.graph.height, drag: generalNetworkData.graph.drag
     };
+    //console.log(options);    
     updateLinksCallback(options);
 };
 
@@ -143,7 +146,7 @@ var updateNetwork = function (graph, nodeData) {
             // Calculate distance for every node.
             var newDist = dist(nodes[i][1].x, nodes[i][1].y, nodeData.x, nodeData.y);
 
-            if (generalNetworkData.graph.r < newDist) {
+            if (generalNetworkData.graph.r < newDist || nodeData.remove==true) {
 
                 // We check both combinations against the hash table.
                 // Protects against bi-links.
@@ -157,17 +160,18 @@ var updateNetwork = function (graph, nodeData) {
                     graph.removeEdge(id, nodes[i][0]);
                 }
             } else {
+                edge = [nodeData.index, nodes[i][1].index];
                 // Only run if both possible links are not there.
+                //if (edge in changes.addedEdges || edge2 in changes.addedEdges) continue;
                 if (!graph.hasEdge(nodes[i][0], id)) {
 
                     // Add the edge to changes.
-                    changes.addedEdges.push([nodeData.index, nodes[i][1].index]);
+                    changes.addedEdges.push(edge);
 
                     // Update the structure with the distance as the weight
                     graph.addEdge(id, nodes[i][0], {
-                        weight: newDist
-                    });
-
+                         weight: newDist
+                      });
                 }
             }
 

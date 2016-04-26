@@ -1,4 +1,3 @@
-// This will change based on what a user picks...
 var svg = false;
 var force = false;
 
@@ -142,6 +141,7 @@ var loadFile = function () {
         lines = e.target.result;
         var graphData = JSON.parse(lines);
         displayNetwork(graphData);
+        updateCallback(graphData.nodes[0]); 
     }
 };
 

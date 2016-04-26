@@ -1,24 +1,56 @@
-var width = 700;
-var height = 500;
 var selected_id = -1;
 
 var setPane = function(target, options){
-  // console.log(options);
-
+  //console.log(options);
+  width = parseInt(options.width);
+  height = parseInt(options.height);
+  if (width > DEFAULT_GEN.max_width) width = DEFAULT_GEN.max_width;
+  if (height > DEFAULT_GEN.max_height) height = DEFAULT_GEN.max_height;
+  generalNetworkData.graph.width = width;
+  generalNetworkData.graph.height = height;
+  
   if (options.wipeOnNewLoad) {
     target.selectAll("*").remove();
   }
+  target.attr("width", width + options.padding*2)
+    .attr("height", height + options.padding*2);
+	
+   drawGrid(target, width, height);	
+};
 
-  if (options.width && options.height) {
-    svg.attr("width", options.width)
-    .attr("id", targetSvgId)
-    .attr("height", options.height);
-  } else {
-    svg.attr("width", width)
-    .attr("id", targetSvgId)
-    .attr("height", height);
+var drawGrid = function(svg, width, height) {
+      
+  var op=0;
+  
+  if (document.getElementById('grid').checked)
+    op = 1;
+	
+  svg.selectAll(".axis").remove();	
+  
+  // Add the x-axis.
+  x = svg.append("g")
+      .attr("class", "x axis")
+  for (var k = 0; k <= width; k += 100)
+  {     
+    x.append("line").attr("x1", k).attr("y1", 0).attr("x2", k).attr("y2", height)
+        .style("stroke-dasharray", ("1, 2"))
+        .style("stroke-width", op)
+        .style("stroke", '#DC143C');
+    x.append("text").text(""+(k/100)).attr("x",k-5).attr("y", -2)
+    .style("font-size", "10px").style("fill", 'transparent');    
   }
-
+  // Add the y-axis.
+  y = svg.append("g")
+      .attr("class", "y axis");
+  for (var k = 0; k <= height; k += 100) {      
+    y.append("line").attr("x1", 0).attr("y1", k).attr("x2", width).attr("y2", k)
+        .style("stroke-dasharray", ("1, 2"))
+        .style("stroke-width", op)
+        .style("stroke", '#DC143C');
+    if (k>0)     
+        y.append("text").text(""+(k/100)).attr("x",-8).attr("y", k)
+        .style("font-size", "10px").style("fill", 'transparent'); 
+  }          
 };
 
 function isNumber(evt) {
@@ -32,18 +64,25 @@ function isNumber(evt) {
 
 function showNode(node)
 {
+	show_tab = false;
+	if (typeof node === 'number')
+	{
+		show_tab = true;
+		node = generalNetworkData.nodes[node];  // read object
+	}
 	show_node = document.getElementById("show_node");
-
 	if (show_node && show_node.checked)
+		show_tab = true;
+		
+	if (show_tab)
 		$('.nav-tabs a[href="#node_control"]').tab('show');
 
 	selected_id = node.id;
+	console.log(selected_id);
 	document.getElementById("node_id").innerHTML = "" + node.id;
 	document.getElementById("node_name").value = node.name;
 	document.getElementById("node_x").innerHTML = "" + Math.round(node.x);
-	//document.getElementById("node_x").max = network.width;
 	document.getElementById("node_y").innerHTML = "" + Math.round(node.y);
-	//document.getElementById("node_y").max = network.height;
 	color_id = getColorCode(node.color);
 	document.getElementById("node_color").value = color_id;
 	document.getElementById("node_size").value = node.size;
@@ -60,8 +99,6 @@ function setNode(action)
 	node.shape = document.getElementById("node_shape").value;
 	node.color = getColor(document.getElementById("node_color").value);
 	node.size = document.getElementById("node_size").value;
-	//node.x = document.getElementById("node_x").value;
-	//node.y = document.getElementById("node_y").value;
 	if (action==1) { //Add
 		newId = generalNetworkData.nodes.length;
 		if (node.name==''+node.id) node.name = ''+newId;
@@ -69,7 +106,13 @@ function setNode(action)
 		node.index = newId;
 		node.weight = 0;
 	}
-		
+	if (action==-1) { //Remove
+		node.remove = true;
+		if (selected)  d3.select(selected).style("stroke-width", '0');
+	}
+	if (action==-2) { //Undo Remove
+		delete node.remove;
+	}			
 	updateCallback(node);
 }
 
@@ -103,11 +146,11 @@ function showInfo(display, graph)
     str += "Height:  " + generalNetworkData.graph.height  + "</p>";
     holeData = generalNetworkData.graph.holes;
     //console.log(holeData);
-    if (holeData) {	
-		str += "<p>Obstacle Name:  " + holeData.name;
+    if (holeData && holeData.obstacle.length > 0) {			
+		str += "<p>Obstacle(s):";
 		for (var k = 0; k < holeData.obstacle.length; k++) {
 			holeCoords = holeData.obstacle[k];
-			str += "<br>&nbsp;&nbsp;" + (k + 1) + ". Top Left: (" + holeCoords.x + ", " +  holeCoords.y + "), " +  
+			str += "<br>&nbsp;&nbsp;" + (k + 1) + "." + holeCoords.name + ", Top Left: (" + holeCoords.x + ", " +  holeCoords.y + "), " +  
 				"&nbsp;Width: " + holeCoords.width + ", Height:" + holeCoords.height;
 		}
 		str += "</p>";	
@@ -115,22 +158,38 @@ function showInfo(display, graph)
 	
     if (nn > 0) {
         str += '<table class="table table-condensed table-bordered"><tr>';
-        str += '<th>Id/Name</th><th style="text-align: center;">Shape (size)</th><th style="text-align: center;">Location/Links</th></tr>';
+        str += '<th>Id/Name</th><th style="text-align: center;">Shape (size)</th><th style="text-align: center;">Location/Links</th>'+
+			'<th style="text-align: center;">Action</th></tr>';
     }
 	for (i = 0; i < nn; i++) {
-		bg_color = '';
-		if (i==selected_id) bg_color = 'style="background-color: grey"';
-        color = generalNetworkData.nodes[i].color;
+		bg_color = ' ';
+		
+		node = generalNetworkData.nodes[i];
+		links = ""+node.weight;
+		if (i==selected_id) bg_color = ' style="background-color: lightgreen"';
+		nodeTab = "$('.nav-tabs a[href=\"#node_control\"]').tab('show');";
+		edit = '<input type="button" class="btn btn-primary btn-xs" value="Edit"'+
+				'onclick="showNode('+ i + ');" />';
+			
+		if (node.remove==true) {
+			bg_color = ' style="background-color: darkgrey"';
+			links = "Removed";
+			edit = '<input type="button" class="btn btn-primary btn-xs" value="Undo" onclick="showNode('+ i + ');setNode(-2);" />';
+		}	
+        color = node.color;
 		if (color=='blue') color = "0000ff";
 		if (color=='red') color = "ff0000";
         color = color.replace('#', '');
 		text_color = getContrastYIQ(color);
 		//console.log("*****", color, text_color);
         colorCtr = '<td style="text-align: center; vertical-align: middle; padding: 3px; border-radius:8px; color: ' +
-            text_color +'; background-color: #' + color +'">' + generalNetworkData.nodes[i].shape + ' (' + generalNetworkData.nodes[i].size +  ')</td>';
-        str += "<tr " + bg_color + "><td>" + generalNetworkData.nodes[i].id + '-' + generalNetworkData.nodes[i].name + "</td>" + colorCtr;
-        str += "<td align='center'>" + Math.round(generalNetworkData.nodes[i].x) +", " + Math.round(generalNetworkData.nodes[i].y) + "  (" +
-				generalNetworkData.nodes[i].weight + ")</td></tr>";
+            text_color +'; background-color: #' + color +'">' + node.shape + ' (' + node.size +  ')</td>';
+			
+        str += "<tr id=info"+ i + bg_color + "><td>" + node.id + '-' + node.name + "</td>" + colorCtr;
+        str += "<td align='center'>" + Math.round(node.x) +", " + Math.round(node.y) + "  (" + links
+				 + ")</td>";
+		str += "<td align='center'>" + edit	 + "</td>";				 
+		str += "</tr>"		 
     }
 	str += '</table>';
 	if (display)
@@ -139,7 +198,7 @@ function showInfo(display, graph)
 }
 
 function getColorCode(color_code) {
-    Colors = ['FF0000', '008000', '0000FF', 'FFFF00', '000000', '808080', 'A52A2A', '00FFFF', 'FFA07A', 'FFFFFF'];
+    Colors = ['FF0000', '008000', '0000FF', 'FFFF00', '303030', '808080', 'A52A2A', '00FFFF', 'FFA07A', 'F7F7F7'];
 	var i=0;
 	if (color_code=='blue') color = "0000ff";
 	if (color_code=='red') color = "ff0000";	
@@ -151,7 +210,7 @@ function getColorCode(color_code) {
 }
 	
 function getColor(id) {
-    Colors = ['FF0000', '008000', '0000FF', 'FFFF00', '000000', '808080', 'A52A2A', '00FFFF', 'FFA07A', 'FFFFFF'];
+    Colors = ['FF0000', '008000', '0000FF', 'FFFF00', '303030', '808080', 'A52A2A', '00FFFF', 'FFA07A', 'F7F7F7'];
 	coloringElem = document.getElementById("nodecolor");
 
 	if (id>=0) {
@@ -210,7 +269,27 @@ function label_control()
 	updateCallback(generalNetworkData.nodes[0]);
 }
 
-function axes_control()
+function dark_control()
 {
-	updateCallback(generalNetworkData.nodes[0]);
+	updateCallback(generalNetworkData.nodes[0]);	
+}
+
+function grid_control()
+{
+	updateCallback(generalNetworkData.nodes[0]);	
+}
+
+function getBgInvColor() {
+   bg = "transparent";//document.getElementById("network").style.backgroundColor;
+   ibg = "#000";
+   if (document.getElementById('dark').checked) {ibg = "#fff"; bg = "#000"; }
+   return [bg, ibg];
+} 
+
+function addInput(divName, choices) {
+    var select = $("<select/>")
+    $.each(choices, function(a, b) {
+        select.append($("<option/>").attr("value", b).text(b));
+    });
+    $("#" + divName).append(select);
 }
