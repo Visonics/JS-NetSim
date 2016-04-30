@@ -11,22 +11,24 @@ var color = d3.scale.category20();
 var targetSvgId = "graph";
 
 var selected=null;
+
 function click(d) {
-   if(!selected){
-     selected = this;
-     d3.select(selected).style("stroke-width", '2').style("stroke", '#000');
-  }
-  else {
-     d3.select(selected).style("stroke-width", '0');
-     selected = this;
-     d3.select(selected).style("stroke-width", '2').style("stroke", '#000');
-  }
+  
+  if (d.remove==true) return;
+    
+  stc = getBgInvColor(); 
+      
+  if (selected)  d3.select(selected).style("stroke-width", '0');
+  
+  selected = this;
+  d3.select(selected).style("stroke-width", '1').style("stroke", stc[1]);
+
   showNode(d);
+  d3.event.stopPropagation();   
 }
 
 var nodeElement = function (data, options) {
-    var newNode;
-    var radiusBorder = 6;    
+    var newNode;  
     newNode = svg.select("#nodes").selectAll(".node").data(data);
 
     newNode.enter().append("g").attr("class", "node");
@@ -36,17 +38,19 @@ var nodeElement = function (data, options) {
           
     node_object.on("click", click);   
     node_object.on('mouseover', function(d) {
-        d3.select(this) 
-        .style("fill-opacity", 0.5)
+        if (d.remove!=true)
+            d3.select(this) 
+            .style("fill-opacity", 0.5)
     })
-    .on('mouseout', function(d){
-        d3.select(this) 
-        .style("fill-opacity", 1.0)
-        .style("fill", function (d) {		
-            return d.color;})   
+    .on('mouseout', function(d) {
+        if (d.remove!=true)
+            d3.select(this) 
+            .style("fill-opacity", 1.0)
+            .style("fill", function (d) {		
+                return d.color;})   
     });
        
-	newNode.append("title")
+    newNode.append("title")
         .text(function (d) {
             return d.id + "-" + d.size + "\nx = " + d.x + ", y = " + d.y;
         });
@@ -60,45 +64,36 @@ var nodeElement = function (data, options) {
     return newNode;
 };
 
-var drawAxes = function(width, height) {
-    
-  var x = d3.scale.linear()
-    .range([0, width]);
-
-  var y = d3.scale.linear()
-    .range([height, 0]);  
-    
-  //x.domain(d3.extent(data, function(d) { return d.x; })).nice();
-  //y.domain(d3.extent(data, function(d) { return d.y; })).nice();    
-  
-  // Add the x-axis.
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.svg.axis().scale(x).orient("top"));
-
-  // Add the y-axis.
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(d3.svg.axis().scale(y).orient("left"));    
+var showGrid = function(show) {
+    op=0; fill="transparent";
+    if (show) { op=1; fill="#DC143C"; }
+    d3.selectAll('.axis').selectAll("line").style("stroke-width", op); 
+    d3.selectAll('.axis').selectAll("text").style("fill", fill);
 }
 
 var render = function (graph, options, settings) {
 
+    var padding = 10, margin = 5;
+    options.padding = padding;
     if (!svg) {
         svg = d3.select(".networkview").append("svg")
-            .attr("id", targetSvgId);
+            .attr("id", targetSvgId)
+            //.style("outline", "thin solid #5280FF")
+            .style("padding", padding+"px")
+            .style("margin", margin+"px")
+            .on("click", function (d) {                  
+                if (selected) { d3.select(selected).style("stroke-width", '0'); selected = null}
+            });
     }
 
     if (!options.width) {
-        options.width = 650;
+        options.width = 700;
     }
 
     if (!options.height) {
         options.height = 500;
     }
 
-    var radiusBorder = 6;
     if (options) {
         setPane(svg, options);
     }
@@ -108,8 +103,7 @@ var render = function (graph, options, settings) {
             .alpha(0)
             .size([options.width, options.height]);
     }
-    
-    //drawAxes(options.width, options.height);
+        
     
     var drag = force.drag();
     
@@ -158,13 +152,12 @@ var render = function (graph, options, settings) {
     var start = function () {		
         var link = svg.select("#links").selectAll(".link")
             .data(links);
-
+        stc = getBgInvColor();  
         link.enter().append("line")
 			.attr("class", "link")
 			.style("opacity", '0.6')
-            .style("stroke", '#000')
-            .style("stroke-dasharray", ("5, 5"))
-            .style("stroke-width", 1);
+            .style("stroke", stc)
+            .style("stroke-dasharray", ("5, 5"));
 
         link.exit().remove();
 
@@ -172,19 +165,19 @@ var render = function (graph, options, settings) {
         force.on("tick", function () {
 
             link.attr("x1", function (d) {
-                    return d.source.x = Math.max(radiusBorder, Math.min(options.width - radiusBorder, d.source.x));
+                    return d.source.x = Math.max(padding, Math.min(options.width - padding, d.source.x));
                 })
 
                 .attr("y1", function (d) {
-                    return d.source.y = Math.max(radiusBorder, Math.min(options.height - radiusBorder, d.source.y));
+                    return d.source.y = Math.max(padding, Math.min(options.height - padding, d.source.y));
                 })
 
                 .attr("x2", function (d) {
-                    return d.target.x = Math.max(radiusBorder, Math.min(options.width - radiusBorder, d.target.x));
+                    return d.target.x = Math.max(padding, Math.min(options.width - padding, d.target.x));
                 })
 
                 .attr("y2", function (d) {
-                    return d.target.y = Math.max(radiusBorder, Math.min(options.height - radiusBorder, d.target.y));
+                    return d.target.y = Math.max(padding, Math.min(options.height - padding, d.target.y));
                 });                              	
         });
 
@@ -232,27 +225,34 @@ var render = function (graph, options, settings) {
 
 	updateCallback = function (d) {
         option = {"labels": document.getElementById('labels').checked, 
-                  "axes": document.getElementById('axes').checked};
+                  "label_in": document.getElementById('label_in').checked};
 		//console.log("x=", d.x, 'y=',d.y); 
-		//console.log(d.color, d.size, d.shape);	
+		//console.log(d.color, d.size, d.shape);
+        showGrid(document.getElementById('grid').checked);
+         	
         d3.selectAll('.node').select("title").text(function (d) {
                     return d.id + "-" + d.size + "\nx= " + d.x + ", y= " + d.y;
                 }
         );
-               
+        stc = getBgInvColor();
+        //links 
+        svg.style("background-color", stc[0]); 
+        d3.selectAll('.link').style("stroke", stc[1]);
+              
+        
         if (option)	
             d3.selectAll('.node').select("text").text(function (d) {
-                    if (option.labels) return d.name; else return "";
+                    if ((option.labels || option.label_in) && d.remove!=true) return d.name; else return "";
                 }
             ).attr("x", function (d) { return d.x;})
              .attr("y", function (d) { return d.y;})
              .attr("dx", function (d) {
-                    if (option.axes) return -d.size/4; else return d.size;
+                    if (option.label_in) return -d.size/4; else return d.size;
                 }                
             ).style('font-size', '12px')
             .style('fill', function (d) {
                     text_color = d.color;
-                    if (option.axes || text_color=='#FFFFFF') {
+                    if (option.label_in || text_color=='#FFFFFF') {
                         color = text_color.replace('#', '');
 		                text_color = getContrastYIQ(color);
                     }    
@@ -261,16 +261,19 @@ var render = function (graph, options, settings) {
             
 
         d3.selectAll('.node').select("path").style('fill', function (d) {
+                    if (d.remove==true) return "transparent";
                     return d.color;
                })
                .style('fill-rule', "nonzero")
                .attr("d", function(d) { return Nodeshapes[d.shape]["d"]; });
                                                     
         d3.selectAll('.node').select("path").attr("transform", function(d) { 
-            dx = Math.max(radiusBorder, Math.min(options.width - radiusBorder, d.x)); 
-            dy = Math.max(radiusBorder, Math.min(options.height - radiusBorder, d.y));
-            return "translate(" + (dx)  + "," + (dy) + ") scale(" + 
-             (d.size / (Nodeshapes[d.shape]["zoom"] || 1)) +  ")"; 
+            dx = Math.max(padding, Math.min(options.width - padding, d.x)); 
+            dy = Math.max(padding, Math.min(options.height - padding, d.y));
+            dz = Nodeshapes[d.shape]["zoom"] || 1;
+            dm = (Nodeshapes[d.shape]["move_x"] || 0) * d.size/2;
+            return "translate(" + (dx - dm)  + "," + (dy - dm) + ") scale(" + 
+             (d.size / dz) +  ")"; 
         });
         
 		var visualChanges = updateNetwork(graph, d);
@@ -285,12 +288,14 @@ var render = function (graph, options, settings) {
     // Look at networkData.js
     updateLinksCallback = function (new_options) {
         options = new_options;
+        options.padding = padding;
         setPane(svg, options);
+        console.log(options);
         if (options.drag)
-            d3.selectAll('.node').select("path").call(force.drag);
+            d3.selectAll('.node').call(force.drag);
         else
             d3.selectAll('.node').on('mousedown.drag', null);
-
+              
         updateCompleteNetwork(graph);
     };
 
@@ -299,7 +304,7 @@ var render = function (graph, options, settings) {
         d3.selectAll(".node").each(function (d) {
             var visualChanges = updateNetwork(graph, d);
             updateVisuals(visualChanges);
-        })
+        });
     };
 
 	start();

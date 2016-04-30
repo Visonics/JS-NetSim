@@ -8,22 +8,41 @@ $(document).ready(function () {
     updateBlockade();
 
     $("#saveJson").on("click", function () {
-        // console.log(generalNetworkData);
         fname = getFilename(generalNetworkData.graph.name + ".json");
         if (fname) {
-            $(this).attr("href", "data:text/json;charset=utf8, " + encodeURIComponent(JSON.stringify(generalNetworkData, null, 4))).attr("download", fname);
+            $(this).attr("href", "data:text/json;charset=utf8, " + 
+              encodeURIComponent(JSON.stringify(generalNetworkData, null, 4))).attr("download", fname);
         }
     });
 
     $("#savePNG").on("click", function () {
-            //png = ipDiagram.makeImageData({scale: 2, maxSize: new go.Size(Infinity, Infinity)});
-            //console.log(png);
-            fname = getFilename(generalNetworkData.graph.name + ".png");
-            if (fname) {
-                $(this).attr("href", png).attr("download", fname);
-            }
+        fname = getFilename(generalNetworkData.graph.name + ".png");
+        if (fname) {
+            //d3.select('#graph').style("background-color", '#fff');
+            container = $("#graph");            
+            html2canvas(container, {
+                onrendered: function(canvas) {
+                    canvas.toBlob(function (blob) { 
+                      saveAs(blob, fname);      
+                    });
+                 
+                },
+                width: generalNetworkData.graph.width + 20,
+                height: generalNetworkData.graph.height + 20
+            });    
+        }
     });
 
+    // $("#savePDF").on("click", function () {
+        // fname = getFilename(generalNetworkData.graph.name + ".pdf");
+        // if (fname) {
+            // container = $("#network");
+            // var pdf = new jsPDF();            
+            // p = svgElementToPdf("network", pdf, {});
+            // console.log(p);
+        // }
+    // });
+   
     $("#saveSVG").on("click", function () {
         // console.log("svg:", svg[0][0]);
         fname = getFilename(generalNetworkData.graph.name + ".svg");
@@ -48,7 +67,7 @@ $(document).ready(function () {
             source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
 
             //convert svg source to URI data scheme.
-            var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+            var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
             $(this).attr("href", url).attr("download", fname);
         }
     });
