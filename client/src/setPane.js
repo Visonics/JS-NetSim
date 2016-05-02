@@ -182,8 +182,11 @@ function showInfo(display, graph)
         color = color.replace('#', '');
 		text_color = getContrastYIQ(color);
 		//console.log("*****", color, text_color);
-        colorCtr = '<td style="text-align: center; vertical-align: middle; padding: 3px; border-radius:8px; color: ' +
-            text_color +'; background-color: #' + color +'">' + node.shape + ' (' + node.size +  ')</td>';
+        colorCtr = '<td data-toggle="tooltip" data-placement="right" title="Click to Edit"' + 
+			' style="cursor: pointer; text-align: center; vertical-align: center; padding: 2px; border-radius:8px; color: ' + 
+			text_color +'; background-color: #' + color +'" onclick="showNode('+ i + ');">' + node.shape + ' (' + node.size +  ')</td>';
+        //colorCtr = '<td style="text-align: center; vertical-align: middle; padding: 3px; border-radius:8px; color: ' +
+        //    text_color +'; background-color: #' + color +'">' + node.shape + ' (' + node.size +  ')</td>';
 			
         str += "<tr id=info"+ i + bg_color + "><td>" + node.id + '-' + node.name + "</td>" + colorCtr;
         str += "<td align='center'>" + Math.round(node.x) +", " + Math.round(node.y) + "  (" + links

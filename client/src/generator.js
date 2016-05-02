@@ -218,7 +218,7 @@ function updateBlockade(remove, shape) {
           obstacle_map.selectAll("*")  // For new rect, go through the update process
               .data(dataset.obstacle)
               .enter()
-              .append("rect")
+              .append("rect") //.call(force.drag().on('drag'))
               .attr(rectAttrs); // Get attributes from rectAttrs var
   }
   
