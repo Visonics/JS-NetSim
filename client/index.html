@@ -35,7 +35,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
     <link href="http://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
     <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
-    <title>NetSim 1.0 (2016)</title>
+    <title>Visual-NetSim 1.0 (2016)</title>
 
     <!-- Bootstrap core CSS -->
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -49,10 +49,12 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 <div class="well well-xs header">
     <div class="row">
         <div class="col-sm-3">
-            <span class="btn btn-primary btn-xs left_button subtitle"> Copyright (c) 2016 and beyond<br>Farrukh Shahzad, PhD and Omar Shaikh</span>
+            <span class="btn btn-primary btn-xs left_button subtitle"> Copyright (c) 2016 and beyond<br>Farrukh Shahzad and Omar Shaikh</span>
         </div>
         <div class="col-sm-6">
-            <div class="btn btn-primary btn-md title">NetSim Interactive</div>
+            <div class="btn btn-primary btn-md"><div class="title">Visual-Netsim</div>
+            <span class="center subtitle">An Interactive Network Simulator</span>
+            </div>            
         </div>
         <div class="col-sm-3">
         <span>
@@ -87,7 +89,8 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
             <li class="active"><a data-toggle="tab" href="#gen_control">Generate</a></li>
             <li><a data-toggle="tab" href="#setting">Network</a></li>
             <li><a data-toggle="tab" href="#node_control">Node</a></li>
-            <li><a data-toggle="tab" href="#infodiv">Info</a></li>          
+            <li><a data-toggle="tab" href="#infodiv">Info</a></li> 
+            <li><a data-toggle="tab" href="#simdiv">Simulation</a></li>         
         </ul>
         <!-- Network Tab -->
         <div class="tab-content">
@@ -337,7 +340,13 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
             </div>
             <!-- Info Tab -->
             <div id="infodiv" class="tab-pane fade"></div>          
-
+            <!-- Sim Tab -->
+            <div id="simdiv" class="tab-pane fade">
+                <h3>Mobility</h3>
+                Coming Soon!
+                <h3>Localization</h3>
+                Coming Soon!                
+            </div>   
         </div>
 
         <!--<div id='reportdiv' style="margin-right:5px; height:98%; overflow: auto"></div>-->
